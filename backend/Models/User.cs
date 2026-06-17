@@ -12,6 +12,8 @@ namespace backend.Models
         //private string userPassword { get; set; } = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
         public string email {get;set;} = string.Empty;
 
+        public ICollection<RefreshToken> RefreshTokens {get;set;}= new List<RefreshToken>();
+
     }
 
     public class UserLogin
