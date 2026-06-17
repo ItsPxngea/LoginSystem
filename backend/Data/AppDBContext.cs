@@ -48,7 +48,7 @@ namespace backend.Data
         {
             modelbuilder.Entity<UserRegistration>().HasData(new UserRegistration
             {
-                userID = Guid.Parse("11111111 - 1111 - 1111 - 1111 - 111111111111"),
+                userID = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                 userFirstName ="Admin",
                 userLastName = "User",
                 userProfileName ="admin",
