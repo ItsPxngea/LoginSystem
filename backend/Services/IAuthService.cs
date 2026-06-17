@@ -4,7 +4,7 @@ namespace backend.Services
 {
     public interface IAuthService
     {
-        Task<AuthResponse> Register(UserRegistration request);
+        Task<AuthResponse> Register(UserRegistrationRequest request);
         Task<AuthResponse> Login(UserLogin request);
         
     }

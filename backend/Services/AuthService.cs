@@ -21,12 +21,12 @@ namespace backend.Services
         }
 
         //Authentication for new user Registration
-        public async Task<AuthResponse> Register(UserRegistration request)
+        public async Task<AuthResponse> Register(UserRegistrationRequest request)
         {
             var emailExists = await _context.Users.AnyAsync(u => u.email == request.email);
             if (emailExists) throw new Exception("Email is already registered");
 
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.passwordHash);
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
 
             var user = new UserRegistration
             {
@@ -35,7 +35,7 @@ namespace backend.Services
                 userLastName = request.userLastName,
                 userProfileName = request.userProfileName,
                 email = request.email,
-                passwordHash = request.passwordHash
+                passwordHash = passwordHash
             };
 
             _context.Users.Add(user);
@@ -57,7 +57,10 @@ namespace backend.Services
         private AuthResponse BuildAuthResponse(UserRegistration user)
         {
             var token = GenerateJwtToken(user);
-            var expiry = DateTime.UtcNow.AddMinutes(double.Parse(_config["Jwt:ExpiryMinutes"] ?? "60"));
+            //var expiry = DateTime.UtcNow.AddMinutes(double.Parse(_config["Jwt:ExpiryMinutes"] ?? "60"));
+            var expiryMinutes = Convert.ToDouble(_config["Jwt:ExpiryMinutes"] ?? "60");
+            var expiry = DateTime.UtcNow.AddMinutes(expiryMinutes);
+
 
             return new AuthResponse
             {
@@ -93,7 +96,8 @@ namespace backend.Services
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(double.Parse(_config["Jwt:ExpiryMinutes"] ?? "60")),
+                //expires: DateTime.Now.AddMinutes(double.Parse(_config["Jwt:ExpiryMinutes"] ?? "60")),
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_config["Jwt:ExpiryMinutes"] ?? "60")),
                 signingCredentials: credentials
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
