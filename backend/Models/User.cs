@@ -19,12 +19,13 @@ namespace backend.Models
 
     public class UserRegistrationRequest
     {
+        //public Guid userID { get; set; }
         public string userFirstName {get; set;} = string.Empty;
         public string userLastName {get;set;} = string.Empty;
         public string userProfileName {get;set;} = string.Empty;
         public string email {get;set;} = string.Empty;
         public string password {get;set;} = string.Empty;
-        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+        //public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 
     public class UserLogin
