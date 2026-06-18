@@ -1,4 +1,5 @@
 #appsettings
-/backend/appsettings.json
-
-/backend/obj/debug
+backend/appsettings.json
+backend/appsettingsDevelopment.json
+backend/obj/debug
+backend/bin
