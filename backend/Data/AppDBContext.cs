@@ -9,6 +9,7 @@ namespace backend.Data
 
         public DbSet<UserRegistration> Users => Set<UserRegistration>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+        public DbSet<PasswordResetToken> PasswordResetToken =>Set<PasswordResetToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +43,18 @@ namespace backend.Data
 
                  entity.Property(rt=>rt.CreatedAt).HasDefaultValueSql("now()");
                  });
+
+
+            modelBuilder.Entity<PasswordResetToken>(entity =>
+            {
+                entity.HasKey(t=>t.Id);
+                entity.HasIndex(t => t.Token).IsUnique();
+                entity.Property(t => t.CreatedAt).HasDefaultValueSql("now()");
+                entity.HasOne(t => t.User)
+                      .WithMany()
+                      .HasForeignKey(t => t.UserID)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
         private static void SeeData(ModelBuilder modelbuilder)
@@ -57,6 +70,8 @@ namespace backend.Data
 
             });
         }
+
+
 
     }
 }
