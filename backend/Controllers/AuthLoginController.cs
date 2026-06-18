@@ -20,7 +20,7 @@ namespace backend.Controllers
         {
             //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(response));
             try
-            {   Console.WriteLine("Test: "+ System.Text.Json.JsonSerializer.Serialize(request));
+            {   //Console.WriteLine("Test: "+ System.Text.Json.JsonSerializer.Serialize(request));
                 var response = await _authService.Register(request);
 
                 return Ok(response);
@@ -28,7 +28,7 @@ namespace backend.Controllers
             catch (Exception e)
             {
 
-                //Console.WriteLine(e.Message +"\nthis is test 1");
+                //Console.WriteLine(e.ToString() +"\nthis is test 1");
                 return BadRequest(new { message = e.Message });
             }
         }
