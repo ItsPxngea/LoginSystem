@@ -4,7 +4,6 @@ using System.Text;
 using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Services
@@ -21,7 +20,7 @@ namespace backend.Services
         }
 
         //Authentication for new user Registration
-        public async Task<AuthResponse> Register(UserRegistrationRequest request)
+        /*public async Task<AuthResponse> Register(UserRegistrationRequest request)
         {
             var emailExists = await _context.Users.AnyAsync(u => u.email == request.email);
             if (emailExists) throw new Exception("Email is already registered");
@@ -41,12 +40,51 @@ namespace backend.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return BuildAuthResponse(user);
+        }*/
+
+        public async Task<AuthResponse> Register(UserRegistrationRequest request)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
+
+            try
+            {
+                //normalizing email for random capital letters and spaces
+                var email = request.email.ToLowerInvariant().Trim();
+                var emailExists = await _context.Users.AnyAsync(u => u.email == email);
+                if (emailExists) throw new Exception("Email is already registered");
+
+                var user = new UserRegistration
+                {
+                    userID = Guid.NewGuid(),
+                    userFirstName = request.userFirstName,
+                    userLastName = request.userLastName,
+                    userProfileName = request.userProfileName,
+                    email = request.email,
+                    passwordHash = passwordHash
+                };
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                var response = BuildAuthResponse(user);
+                await transaction.CommitAsync();
+
+                return response;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         //Authentication for User login details
         public async Task<AuthResponse> Login(UserLogin request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == request.email);
+            //normalizing email for random capital letters and spaces
+            var email = request.email.ToLowerInvariant().Trim();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
             var isValidPassword = BCrypt.Net.BCrypt.Verify(request.password, user.passwordHash);
 
             if (user == null || !isValidPassword) throw new Exception("Invalid email or password");
@@ -65,7 +103,7 @@ namespace backend.Services
             return new AuthResponse
             {
                 token = token,
-                expiresAt = expiry.ToString("0"),
+                expiresAt = expiry.ToString("O"),
                 user = new UserDataTransfer
                 {
                     userID = user.userID,
