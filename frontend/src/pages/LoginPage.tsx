@@ -2,6 +2,7 @@ import { useState} from 'react'
 import type {FormEvent} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/UseAuth'
+import "../Styles/LoginPageStyle.css"
 
 export default function LoginPage() {
   const { login, loading, error } = useAuth()

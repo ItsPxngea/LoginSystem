@@ -1,0 +1,361 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0d0d0f;
+    --panel: #16161a;
+    --border: #2a2a32;
+    --accent: #7c6ef7;
+    --accent-dim: rgba(124, 110, 247, 0.15);
+    --text: #e8e8f0;
+    --muted: #7a7a90;
+    --input-bg: #1e1e26;
+    --error: #f06a6a;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.wrap {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    min-height: 560px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Left panel */
+.brand {
+    flex: 1;
+    background: linear-gradient(145deg, #1a1530 0%, #0f1225 60%, #0d0d0f 100%);
+    padding: 52px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand::before {
+    content: '';
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124, 110, 247, 0.18) 0%, transparent 70%);
+    top: -80px;
+    left: -80px;
+    pointer-events: none;
+}
+
+.brand::after {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124, 110, 247, 0.10) 0%, transparent 70%);
+    bottom: 60px;
+    right: -60px;
+    pointer-events: none;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-mark svg {
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+}
+
+.logo-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: 0.01em;
+    color: var(--text);
+}
+
+.brand-copy {
+    position: relative;
+    z-index: 1;
+}
+
+.brand-copy h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 34px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    color: #fff;
+}
+
+.brand-copy h1 em {
+    font-style: normal;
+    color: var(--accent);
+}
+
+.brand-copy p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 260px;
+}
+
+.brand-dots {
+    display: flex;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+}
+
+.dot.active {
+    background: var(--accent);
+}
+
+/* Right panel */
+.form-panel {
+    flex: 0 0 400px;
+    background: var(--panel);
+    padding: 52px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-panel h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+}
+
+.form-panel .sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 36px;
+}
+
+.field {
+    margin-bottom: 20px;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+}
+
+.field input {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.field input::placeholder {
+    color: #3e3e52;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.check-label input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 14px;
+    height: 14px;
+}
+
+.forgot {
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+
+.forgot:hover {
+    opacity: 0.7;
+}
+
+.btn-primary {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-bottom: 20px;
+}
+
+.btn-primary:hover {
+    opacity: 0.88;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.divider span {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.btn-ghost {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: border-color 0.2s, background 0.2s;
+    margin-bottom: 32px;
+}
+
+.btn-ghost:hover {
+    border-color: var(--muted);
+    background: var(--input-bg);
+}
+
+.btn-ghost svg {
+    width: 18px;
+    height: 18px;
+}
+
+.signup-cta {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.signup-cta a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.signup-cta a:hover {
+    text-decoration: underline;
+}
+
+/* error */
+.error-msg {
+    background: rgba(240, 106, 106, 0.1);
+    border: 1px solid rgba(240, 106, 106, 0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--error);
+    margin-bottom: 20px;
+    display: none;
+}
+
+.error-msg.show {
+    display: block;
+}
+
+@media (max-width: 700px) {
+    .brand {
+        display: none;
+    }
+
+    .wrap {
+        max-width: 420px;
+    }
+
+    .form-panel {
+        flex: 1;
+        padding: 40px 28px;
+    }
+}
