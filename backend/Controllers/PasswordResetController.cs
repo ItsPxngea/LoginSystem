@@ -6,11 +6,11 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PasswordController : ControllerBase
+    public class PasswordResetController : ControllerBase
     {
         private readonly IPasswordResetService _service;
 
-        public PasswordController(IPasswordResetService service)
+        public PasswordResetController(IPasswordResetService service)
         {
             _service = service;
         }
