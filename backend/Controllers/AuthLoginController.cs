@@ -47,5 +47,21 @@ namespace backend.Controllers
             }
         }
 
+
+        [HttpPost("google")]
+        public async Task<IActionResult>GoogleLogin([FromBody] GoogleLoginRequest request)
+        {
+            try
+            {
+                var response = await _authService.GoogleLogin(request.credential);
+                return Ok(response);
+            }   
+            catch (Exception e)
+            {
+                return Unauthorized(new {message = e.Message});
+            }
+        }
+
+
     }
 }
