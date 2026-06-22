@@ -55,6 +55,27 @@ export function useAuth() {
     }
   }
 
+  const loginWithGoogle = async (credential: string): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
+
+    try {
+
+      const data = await authApi.googleLogin(credential);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      return true;
+
+    } catch (err) {
+      setError((err as ApiError).message ?? "Google sign-in failed. Please try again.")
+      return false;
+
+    } finally {
+      setLoading(false);
+    }
+  }
+
 
   const logout = () => {
     localStorage.removeItem("token")
@@ -63,5 +84,5 @@ export function useAuth() {
 
 
 
-  return { login, register, logout, loading, error }
+  return { login, register, loginWithGoogle, logout, loading, error }
 }

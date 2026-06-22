@@ -1,5 +1,5 @@
 import { http } from './Client'
-import type { LoginRequest, AuthResponse, RegisterRequest ,} from '../types/Auth'
+import type { LoginRequest, AuthResponse, RegisterRequest, } from '../types/Auth'
 
 export const authApi = {
   login: (credentials: LoginRequest) =>
@@ -11,6 +11,9 @@ export const authApi = {
   /*getCurrentUser: () =>
     http.get<User>('/auth/me'),*/
 
-  register: (data:RegisterRequest)=>
-    http.post<AuthResponse>("/authlogin/register", data)
+  register: (data: RegisterRequest) =>
+    http.post<AuthResponse>("/authlogin/register", data),
+
+  googleLogin: (credential: string) =>
+    http.post<AuthResponse>("/authLogin/google", { credential })
 }
