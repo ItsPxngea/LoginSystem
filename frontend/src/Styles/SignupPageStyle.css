@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .signup-page {
     background: #0d0d0f;
     min-height: 100vh;
@@ -13,7 +17,7 @@
     border: 1px solid #2a2a32;
     border-radius: 1rem;
     width: 100%;
-    max-width: 400%;
+    max-width: 420px;
     padding: 48px 40px 40px;
 }
 
@@ -50,7 +54,7 @@
     margin-bottom: 18px;
 }
 
-.signup-subbeading {
+.signup-subheading {
     font-size: 14px;
     color: #7a7a90;
     margin-bottom: 2rem;
@@ -111,7 +115,7 @@
     cursor: pointer;
     transition: opacity 0.2s;
     margin-bottom: 1rem;
-    margin-top: 4px;
+    margin-top: 14px;
 }
 
 .signup-btn-primary:hover:not(:disabled) {
@@ -193,8 +197,7 @@
     font-weight: 400;
     color: #f06a6a;
     margin-bottom: 20px;
-    margin-left: 25%;
-    margin-right: 25%;
+
     text-align: center;
     align-items: center;
     justify-content: center;
