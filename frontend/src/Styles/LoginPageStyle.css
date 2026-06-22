@@ -24,6 +24,19 @@
     margin-bottom: 36px;
 }
 
+.login-logo-mark {
+    width: 2rem;
+    height: 2rem;
+    background: #7c6ef7;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+}
+
 .login-logo-name {
     font-family: "DM Serif Display", serif;
     font-size: 18px;
@@ -187,12 +200,13 @@
     justify-content: center;
 }
 
-.login-google-wrap{
+.login-google-wrap {
     margin-bottom: 21px;
     display: flex;
     justify-content: center;
 }
-.login-google-wrap>div{
+
+.login-google-wrap>div {
     width: 100% !important;
 }
 
@@ -218,4 +232,36 @@
 .login-btn-google:hover {
     border-color: #3e3e52;
     background: #1e1e26;
+}
+
+.login-password-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.login-password-wrap input {
+    width: 100%;
+    padding-right: 42px;
+}
+
+.login-password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 4px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #7a7a90;
+    transition: color 0.15s;
+}
+
+.login-password-toggle:hover {
+    color: #e8e8f0;
 }
