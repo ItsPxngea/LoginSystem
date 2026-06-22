@@ -1,12 +1,12 @@
 import { useState } from "react"
 import type { FormEvent } from "react"
-import { Link,useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/UseAuth"
 import "../Styles/SignupPageStyle.css"
 
 export default function SignUpPage() {
 
-    const{register, loading, error} =useAuth()
+    const { register, loading, error } = useAuth()
     const navigate = useNavigate()
 
     const [firstName, setFirstName] = useState('')
@@ -19,7 +19,7 @@ export default function SignUpPage() {
     //const [error, setError] = useState('')
     //const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
-    const [showConfirmPassword,setShowConfirmPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const EyeIcon = ({ visible }: { visible: boolean }) =>
         visible ? (
@@ -58,14 +58,14 @@ export default function SignUpPage() {
         setTimeout(() => setLoading(false), 1500)*/
 
         const ok = await register({
-            userFirstName :firstName,
+            userFirstName: firstName,
             userLastName: lastName,
             userProfileName: profileName,
             email,
             password,
         })
 
-        if(ok) navigate("/dashboard")
+        if (ok) navigate("/dashboard")
 
     }
 
@@ -78,12 +78,12 @@ export default function SignUpPage() {
                 </div>
 
                 <h1 className="signup-heading">Create your account</h1>
-                {error && <div className="signup-error">{error}</div>}
+                {(formError || error) && <div className="signup-error">{formError || error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="signup-field-row">
                         <div className="signup-field">
-                            <label className="signup-field">First name</label>
+                            <label htmlFor="firstName">First name</label>
                             <input id="firstName"
                                 type="text"
                                 placeholder="First Name"
@@ -117,6 +117,7 @@ export default function SignUpPage() {
                         <label htmlFor="email">Email</label>
                         <input id="email"
                             type="email"
+                            value={email}
                             placeholder="you@example.com"
                             autoComplete="email"
                             onChange={e => setEmail(e.target.value)} />
@@ -125,19 +126,19 @@ export default function SignUpPage() {
                     <div className="signup-field">
                         <label htmlFor="password">Password</label>
                         <div className="signup-password-wrap">
-                        <input id="password"
-                            type={showPassword ? "text":"password"}
-                            placeholder="********"
-                            autoComplete="new-password"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)} />
+                            <input id="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="********"
+                                autoComplete="new-password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)} />
                             {/*Eye Icon toggle to view password*/}
                             <button type="button"
-                            className="signup-password-toggle"
-                            onClick={()=>setShowPassword(v =>!v)}
-                            aria-label={showPassword ? "Hide password" : "Show password"}
-                            tabIndex={-1}>
-                                <EyeIcon visible = {showPassword}/>
+                                className="signup-password-toggle"
+                                onClick={() => setShowPassword(v => !v)}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                tabIndex={-1}>
+                                <EyeIcon visible={showPassword} />
                             </button>
                         </div>
                     </div>
@@ -145,18 +146,18 @@ export default function SignUpPage() {
                     <div className="signup-field">
                         <label htmlFor="confirmPassword">Confirm password</label>
                         <div className="signup-password-wrap">
-                        <input id="confirmPassword"
-                            type={showConfirmPassword ?"text":"password"}
-                            placeholder="********"
-                            autoComplete="new-password"
-                            value={confirmPassword}
-                            onChange={e => setConfirmPassword(e.target.value)} />
+                            <input id="confirmPassword"
+                                type={showConfirmPassword ? "text" : "password"}
+                                placeholder="********"
+                                autoComplete="new-password"
+                                value={confirmPassword}
+                                onChange={e => setConfirmPassword(e.target.value)} />
 
                             <button type="button"
-                            className="signup-password-toggle"
-                            onClick={() =>setShowConfirmPassword(v=>!v)}
-                            aria-label={showConfirmPassword ? "Hide password": "Show password"}
-                            tabIndex={-1}>
+                                className="signup-password-toggle"
+                                onClick={() => setShowConfirmPassword(v => !v)}
+                                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                tabIndex={-1}>
                                 <EyeIcon visible={showConfirmPassword} />
                             </button>
 
