@@ -3,7 +3,7 @@ import type { LoginRequest, AuthResponse, RegisterRequest ,} from '../types/Auth
 
 export const authApi = {
   login: (credentials: LoginRequest) =>
-    http.post<AuthResponse>('/auth/login', credentials),
+    http.post<AuthResponse>('/authLogin/login', credentials),
 
   logout: () =>
     http.post<void>('/auth/logout', {}),
