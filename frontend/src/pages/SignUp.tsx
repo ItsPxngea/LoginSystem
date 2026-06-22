@@ -1,17 +1,23 @@
 import { useState } from "react"
 import type { FormEvent } from "react"
-import { Link } from "react-router-dom"
+import { Link,useNavigate } from "react-router-dom"
+import { useAuth } from "../hooks/UseAuth"
 import "../Styles/SignupPageStyle.css"
 
 export default function SignUpPage() {
+
+    const{register, loading, error} =useAuth()
+    const navigate = useNavigate()
+
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [profileName, setProfileName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [formError, setFormError] = useState('')
+    //const [error, setError] = useState('')
+    //const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword,setShowConfirmPassword] = useState(false)
 
@@ -28,28 +34,39 @@ export default function SignUpPage() {
             </svg>
         )
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
         if (!firstName || !lastName || !profileName || !email || !password || !confirmPassword) {
-            setError("Please fill in all fields")
+            setFormError("Please fill in all fields")
             return
         }
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match")
+            setFormError("Passwords do not match")
             return
         }
 
         if (password.length < 6) {
-            setError("Password length must be at least 6 characters")
+            setFormError("Password length must be at least 6 characters")
             return
         }
 
-        setError('')
+        setFormError('')
 
-        setLoading(true)
-        setTimeout(() => setLoading(false), 1500)
+        /*setLoading(true)
+        setTimeout(() => setLoading(false), 1500)*/
+
+        const ok = await register({
+            userFirstName :firstName,
+            userLastName: lastName,
+            userProfileName: profileName,
+            email,
+            password,
+        })
+
+        if(ok) navigate("/dashboard")
+
     }
 
     return (
@@ -99,7 +116,7 @@ export default function SignUpPage() {
                     <div className="signup-field">
                         <label htmlFor="email">Email</label>
                         <input id="email"
-                            type="text"
+                            type="email"
                             placeholder="you@example.com"
                             autoComplete="email"
                             onChange={e => setEmail(e.target.value)} />
