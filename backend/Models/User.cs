@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace backend.Models
 {
@@ -20,11 +21,11 @@ namespace backend.Models
     public class UserRegistrationRequest
     {
         //public Guid userID { get; set; }
-        public string userFirstName {get; set;} = string.Empty;
-        public string userLastName {get;set;} = string.Empty;
-        public string userProfileName {get;set;} = string.Empty;
-        public string email {get;set;} = string.Empty;
-        public string password {get;set;} = string.Empty;
+        public string userFirstName { get; set; } = string.Empty;
+        public string userLastName { get; set; } = string.Empty;
+        public string userProfileName { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string password { get; set; } = string.Empty;
         //public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 
@@ -49,6 +50,19 @@ namespace backend.Models
         public string userProfileName { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
     }
+
+    public class GoogleUserInfo
+    {
+        public string? Email { get; set; }
+        public string? GivenName { get; set; }
+        public string? FamilyName { get; set; }
+    }
+
+    public class GoogleLoginRequest
+    {
+        public string credential { get; set; } = string.Empty;
+    }
+
     /*public class Role
     {
         public int ID {get;set;}
@@ -60,4 +74,6 @@ namespace backend.Models
         Guid uder
     }
     */
+
+
 }
