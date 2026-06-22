@@ -1,4 +1,4 @@
-const BASE_URL = '/api'
+const BASE_URL = 'http://localhost:5157/api'
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem('token')
