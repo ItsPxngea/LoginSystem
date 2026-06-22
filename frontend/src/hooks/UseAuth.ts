@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { authApi } from '../API/AuthApi'
-import type { LoginRequest, RegisterRequest, AuthResponse, UserDTO, ApiError } from '../types/Auth'
+import type { LoginRequest, RegisterRequest, ApiError } from '../types/Auth'
 
 export function useAuth() {
   //const [user, setUser] = useState<User | null>(null)
