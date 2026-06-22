@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,49 @@ namespace backend.Services
         {
             _context = context;
             _config = config;
+        }
+
+        public async Task<AuthResponse> GoogleLogin(string accessToken)
+        {
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await httpClient.GetAsync("https://www.googleapis.com/oauth2/v3/userinfo");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Invalid Google token");
+            }
+
+            var json = await response.Content.ReadAsByteArrayAsync();
+
+            var googleUser = JsonSerializer.Deserialize<GoogleUserInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (googleUser == null || string.IsNullOrEmpty(googleUser.Email))
+                throw new Exception("Could not retrieve Google account email");
+
+            var email = googleUser.Email;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
+
+            if (user == null)
+            {
+                var randomPassword = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
+
+                user = new UserRegistration
+                {
+                    userID = Guid.NewGuid(),
+                    userFirstName = googleUser.GivenName ?? "Google",
+                    userLastName = googleUser.FamilyName ?? "User",
+                    userProfileName = email.Split('@')[0],
+                    email = email,
+                    passwordHash = BCrypt.Net.BCrypt.HashPassword(randomPassword),
+                };
+
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+            }
+            return BuildAuthResponse(user);
         }
 
         //Authentication for new user Registration

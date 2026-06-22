@@ -6,6 +6,7 @@ namespace backend.Services
     {
         Task<AuthResponse> Register(UserRegistrationRequest request);
         Task<AuthResponse> Login(UserLogin request);
-        
+        Task<AuthResponse> GoogleLogin(string accessToken);
+
     }
 }
