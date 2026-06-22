@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/UseAuth'
 import "../Styles/LoginPageStyle.css"
 
@@ -152,7 +152,7 @@ export default function LoginPage() {
           </button>
 
           <p className='login-signup'>
-            Don't have an account? <a href="#">Signup now</a>
+            Don't have an account? <Link to="/register">Signup now</Link>
           </p>
         </form>
       </div>

@@ -1,5 +1,7 @@
 import { useState } from "react"
 import type{ FormEvent } from "react"
+import { Link } from "react-router-dom"
+import "../Styles/SignupPageStyle.css"
 
 export default function SignUpPage() {
     const [firstName, setFirstName] = useState('')
@@ -114,7 +116,7 @@ export default function SignUpPage() {
 
                 </form>
 
-                <div className="signup-divider"><span>or</span></div>
+                <div className="signup-divider"><span>OR</span></div>
 
                 <button className="signup-btn-google" type="button">
                     <svg width="18" height="18" viewBox="0 0 48 48">
@@ -127,7 +129,7 @@ export default function SignUpPage() {
                 </button>
 
                 <p className="signup-login-link">
-                    Already have an account? <a href="#">Sign in</a>
+                    Already have an account? <Link to="/login">Sign in</Link>
                 </p>
 
             </div>
