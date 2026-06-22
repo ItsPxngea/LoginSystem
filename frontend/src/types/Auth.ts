@@ -3,6 +3,28 @@ export interface LoginRequest {
   password: string
 }
 
+export interface RegisterRequest {
+  userFirstName: string
+  userLastName: string
+  userProfileName: string
+  email: string
+  password: string
+}
+
+export interface UserDTO {
+  userID: string
+  userFirstName: string
+  userLastName: string
+  userProfileName: string
+  email: string
+}
+
+export interface AuthResponse {
+  token: string
+  expiresAt: string
+  user: UserDTO
+}
+
 export interface LoginResponse {
   token: string
   expiresAt: string
