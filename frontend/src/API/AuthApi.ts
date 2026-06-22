@@ -1,13 +1,16 @@
 import { http } from './Client'
-import type { LoginRequest, LoginResponse, User } from '../types/Auth'
+import type { LoginRequest, AuthResponse, RegisterRequest ,} from '../types/Auth'
 
 export const authApi = {
   login: (credentials: LoginRequest) =>
-    http.post<LoginResponse>('/auth/login', credentials),
+    http.post<AuthResponse>('/auth/login', credentials),
 
   logout: () =>
     http.post<void>('/auth/logout', {}),
 
-  getCurrentUser: () =>
-    http.get<User>('/auth/me'),
+  /*getCurrentUser: () =>
+    http.get<User>('/auth/me'),*/
+
+  register: (data:RegisterRequest)=>
+    http.post<AuthResponse>("/authlogin/register", data)
 }
