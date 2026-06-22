@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { GoogleLogin } from '@react-oauth/google'
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
 import type { CredentialResponse } from '@react-oauth/google'
 import { useAuth } from '../hooks/UseAuth'
 import "../Styles/LoginPageStyle.css"
@@ -29,7 +29,15 @@ export default function LoginPage() {
     if (ok) navigate('/dashboard')
   }
 
-  const handleGoogleSuccess = async (response: CredentialResponse) => {
+  const googleSignIn = useGoogleLogin({
+    onSuccess: async (tokenResponse) =>{
+      const ok = await loginWithGoogle(tokenResponse.access_token)
+      if(ok) navigate("/dashboard")
+        else setFormError("Google sign-in failed. Please try again later.")
+    }    
+  })
+
+  /*const handleGoogleSuccess = async (response: CredentialResponse) => {
     if (!response.credential) {
       setFormError("Google sign-in failed. Please try again later.")
       return
@@ -38,6 +46,7 @@ export default function LoginPage() {
     const ok = await loginWithGoogle(response.credential)
     if (ok) navigate("/dashboard")
   }
+    */
 
   /*return (
     <div className="login-wrap">
@@ -153,7 +162,7 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign in"}
           </button>
 
-          {/*<button className="login-btn-google" type="button">
+          <button className="login-btn-google" type="button" onClick={()=>googleSignIn()}>
             <svg width="18" height="18" viewBox="0 0 48 48">
               <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.7 2.2 30.2 0 24 0 14.8 0 6.9 5.4 3 13.2l7.9 6.1C12.7 13.2 17.9 9.5 24 9.5z" />
               <path fill="#34A853" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8C43.9 37.3 46.5 31.3 46.5 24.5z" />
@@ -161,17 +170,20 @@ export default function LoginPage() {
               <path fill="#4285F4" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.7 2.2-7.7 2.2-6.1 0-11.3-4.1-13.1-9.6l-8.5 6.6C6.9 42.6 14.8 48 24 48z" />
             </svg>
             Continue with Google
-          </button>*/}
+          </button>
 
-          <div className='login-google-wrap'>
+          <div className="login-divider"><span>or</span></div>
+
+          {/*<div className='login-google-wrap'>
             <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={()=>setFormError("Google sign-in failed. Please try again later.")}
-            theme='filled_black'
-            shape='rectangular'
-            width="100%"
+              onSuccess={handleGoogleSuccess}
+              onError={() => setFormError("Google sign-in failed. Please try again later.")}
+              theme='filled_black'
+              shape='rectangular'
+              width="100%"
             />
           </div>
+          */}
 
           <p className='login-signup'>
             Don't have an account? <Link to="/register">Signup now</Link>
