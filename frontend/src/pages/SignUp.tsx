@@ -3,10 +3,11 @@ import type { FormEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/UseAuth"
 import "../Styles/SignupPageStyle.css"
+import { useGoogleLogin } from "@react-oauth/google"
 
 export default function SignUpPage() {
 
-    const { register, loading, error } = useAuth()
+    const { register, loginWithGoogle, loading, error } = useAuth()
     const navigate = useNavigate()
 
     const [firstName, setFirstName] = useState('')
@@ -54,6 +55,8 @@ export default function SignUpPage() {
 
         setFormError('')
 
+
+
         /*setLoading(true)
         setTimeout(() => setLoading(false), 1500)*/
 
@@ -68,6 +71,13 @@ export default function SignUpPage() {
         if (ok) navigate("/dashboard")
 
     }
+    const googleSignIn = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const ok = await loginWithGoogle(tokenResponse.access_token)
+            if (ok) navigate("/dashboard")
+            else setFormError("Google sign-in failed. Please try again later.")
+        }
+    })
 
     return (
         <div className="signup-page">
@@ -172,7 +182,7 @@ export default function SignUpPage() {
 
                 <div className="signup-divider"><span>OR</span></div>
 
-                <button className="signup-btn-google" type="button">
+                <button className="signup-btn-google" type="button" onClick={() => googleSignIn()}>
                     <svg width="18" height="18" viewBox="0 0 48 48">
                         <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.7 2.2 30.2 0 24 0 14.8 0 6.9 5.4 3 13.2l7.9 6.1C12.7 13.2 17.9 9.5 24 9.5z" />
                         <path fill="#34A853" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8C43.9 37.3 46.5 31.3 46.5 24.5z" />
