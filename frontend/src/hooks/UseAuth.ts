@@ -1,20 +1,34 @@
 import { useState } from 'react'
 import { authApi } from '../API/AuthApi'
-import type { LoginRequest, RegisterRequest, ApiError } from '../types/Auth'
+import type { LoginRequest, RegisterRequest, ApiError, UserDTO } from '../types/Auth'
 
 export function useAuth() {
   //const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const login = async (credentials: LoginRequest): Promise<boolean> => {
+  const storeSession = (token: string, user: UserDTO, rememberMe: boolean) => {
+    const storage = rememberMe ? localStorage : sessionStorage;
+    const other = rememberMe ? sessionStorage : localStorage;
+
+    storage.setItem("token", token);
+    storage.setItem("user", JSON.stringify(user));
+
+    other.removeItem("token");
+    other.removeItem("user");
+
+  }
+
+  const login = async (credentials: LoginRequest, rememberMe: boolean = false): Promise<boolean> => {
     setLoading(true)
     setError(null)
     try {
       //const { token, user } = await authApi.login(credentials)
       const data = await authApi.login(credentials)
-      localStorage.setItem("user", JSON.stringify(data.user))
-      localStorage.setItem('token', data.token)
+      storeSession(data.token, data.user, rememberMe);
+      //localStorage.setItem("user", JSON.stringify(data.user))
+      //localStorage.setItem('token', data.token)
+
 
       //setUser(user)
       return true
@@ -83,6 +97,11 @@ export function useAuth() {
   }
 
 
+  const getCurrentUser = (): UserDTO | null => {
+    const raw = localStorage.getItem("user") ?? sessionStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  }
 
-  return { login, register, loginWithGoogle, logout, loading, error }
+
+  return { login, register, loginWithGoogle, logout, getCurrentUser, loading, error }
 }

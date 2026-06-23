@@ -1,7 +1,11 @@
 const BASE_URL = '/api'
 
+function getToken(): string | null{
+  return localStorage.getItem("token")?? sessionStorage.getItem("token")
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = localStorage.getItem('token')
+  const token = getToken()
 
   const response = await fetch(`${BASE_URL}${path}`, {
     ...options,
