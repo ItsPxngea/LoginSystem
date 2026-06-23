@@ -8,6 +8,7 @@ export default function ForgotPasswordPage() {
     const [loading, setLoading] = useState(false)
     const [formError, setFormError] = useState('')
     const [submitted, setSubmitted] = useState(false)
+    const [successMessage, setSuccessMessage] = useState('')
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -21,17 +22,19 @@ export default function ForgotPasswordPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/password/forgot", {
+            const res = await fetch("/api/passwordreset/forgot", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email })
             })
 
-            if (res.ok) {
+            if (!res.ok) {
                 const data = await res.json().catch(() => null)
-                throw new Error(data?.message ?? "Something went wrong. Please try again.")
+                throw new Error(data?.message ?? "Something went wrong. Please try again.2")
             }
 
+            const data = await res.json();
+            setSuccessMessage(data.message);
             setSubmitted(true);
 
         } catch (err) {
@@ -55,7 +58,7 @@ export default function ForgotPasswordPage() {
                     <>
                         <h1 className="login-heading">Check your email</h1>
                         <p className="login-subheading">
-                            A password reset link has been sent to your account
+                            {successMessage || "A password reset link has been sent to your account"}
                         </p>
 
                         <Link to="/login" className="login-btn-primary login-btn-link">Back to sign in</Link>
