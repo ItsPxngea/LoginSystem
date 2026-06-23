@@ -180,7 +180,7 @@ export default function LoginPage() {
                 onChange={e => setRemember(e.target.checked)} />
               Remember me
             </label>
-            <a href="#" className='login-forgot'>Forgot password?</a>
+            <a href="/forgot-password" className='login-forgot'>Forgot password?</a>
           </div>
 
           <button type='submit' className='login-btn-primary' disabled={loading}>
