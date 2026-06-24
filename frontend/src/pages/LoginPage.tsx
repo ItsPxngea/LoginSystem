@@ -40,7 +40,7 @@ export default function LoginPage() {
 
     setFormError('')
 
-    const ok = await login({ email, password })
+    const ok = await login({ email, password }, remember)
     if (ok) navigate('/dashboard')
   }
 
