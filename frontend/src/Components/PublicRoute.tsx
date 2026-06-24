@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import type { ReactNode } from "react";
 
-interface ProtectedRouteProps {
+interface PublicRouteProps {
     children: ReactNode;
 }
 
@@ -24,17 +24,13 @@ function isTokenExpired(token: string): boolean {
     }
 }
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+export default function PublicRoute({ children }: PublicRouteProps) {
     const token = getToken();
 
-    if (!token || isTokenExpired(token)) {
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-
-        sessionStorage.removeItem("token")
-        sessionStorage.removeItem("user")
-
-        return <Navigate to="/login" replace />
+    if (token && !isTokenExpired(token)) {
+        
+        return <Navigate to="/dashboard" replace/>
+        
     }
     return <>{children}</>
 }
