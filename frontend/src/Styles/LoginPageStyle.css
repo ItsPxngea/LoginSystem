@@ -138,6 +138,7 @@
     transition: opacity 0.2s;
     margin-bottom: 1rem;
     margin-top: 4px;
+    text-decoration: none;
 }
 
 .login-btn-primary:hover:not(:disabled) {
