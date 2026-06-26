@@ -25,6 +25,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+builder.Services.AddScoped<IEmailValidationService, EmailValidationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddCors(options =>
