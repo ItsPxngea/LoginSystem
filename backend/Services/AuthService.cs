@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -62,34 +63,8 @@ namespace backend.Services
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
             }
-            return BuildAuthResponse(user);
+            return await BuildAuthResponse(user);
         }
-
-        //Authentication for new user Registration
-        /*public async Task<AuthResponse> Register(UserRegistrationRequest request)
-        {
-            var emailExists = await _context.Users.AnyAsync(u => u.email == request.email);
-            if (emailExists) throw new Exception("Email is already registered");
-
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
-
-            var user = new UserRegistration
-            {
-                userID = Guid.NewGuid(),
-                userFirstName = request.userFirstName,
-                userLastName = request.userLastName,
-                userProfileName = request.userProfileName,
-                email = request.email,
-                passwordHash = passwordHash
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return BuildAuthResponse(user);
-        }*/
-
-       
-
 
         public async Task<AuthResponse> Register(UserRegistrationRequest request)
         {
@@ -102,7 +77,7 @@ namespace backend.Services
                 //normalizing email for random capital letters and spaces
                 var email = request.email.ToLowerInvariant().Trim();
 
-                var (isValid, reason) =await _emailValidation.ValidateAsync(email);
+                var (isValid, reason) = await _emailValidation.ValidateAsync(email);
 
                 if (!isValid)
                 {
@@ -127,7 +102,7 @@ namespace backend.Services
                 var response = BuildAuthResponse(user);
                 await transaction.CommitAsync();
 
-                return response;
+                return await response;
             }
             catch
             {
@@ -145,16 +120,28 @@ namespace backend.Services
             var isValidPassword = BCrypt.Net.BCrypt.Verify(request.password, user.passwordHash);
 
             if (user == null || !isValidPassword) throw new Exception("Invalid email or password");
-            return BuildAuthResponse(user);
+            return await BuildAuthResponse(user);
         }
 
         //Response with token and user details
-        private AuthResponse BuildAuthResponse(UserRegistration user)
+        private async Task<AuthResponse> BuildAuthResponse(UserRegistration user)
         {
             var token = GenerateJwtToken(user);
             //var expiry = DateTime.UtcNow.AddMinutes(double.Parse(_config["Jwt:ExpiryMinutes"] ?? "60"));
             var expiryMinutes = Convert.ToDouble(_config["Jwt:ExpiryMinutes"] ?? "60");
             var expiry = DateTime.UtcNow.AddMinutes(expiryMinutes);
+
+            var refreshTokenValue = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
+
+            var refreshToken = new RefreshToken
+            {
+                Token = refreshTokenValue,
+                UserId = user.userID,
+                ExpiresAt = DateTime.UtcNow.AddHours(8),
+                IsRevoked = false
+            };
+            _context.RefreshTokens.Add(refreshToken);
+            await _context.SaveChangesAsync();
 
 
             return new AuthResponse
@@ -197,5 +184,33 @@ namespace backend.Services
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task Logout(string refreshTokenValue)
+        {
+            var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == refreshTokenValue);
+
+            if (refreshToken == null || refreshToken.IsRevoked) return;
+
+            refreshToken.IsRevoked = true;
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task<AuthResponse> RefreshAccessToken(string refreshTokenvalue)
+        {
+            var refreshtkn = await _context.RefreshTokens.Include(t => t.User).FirstOrDefaultAsync(t => t.Token == refreshTokenvalue);
+
+            if (refreshtkn == null) throw new Exception("Invalid refresh token");
+
+            if (refreshtkn.IsRevoked) throw new Exception("Session has ended, user has been logged out.");
+
+            if (refreshtkn.ExpiresAt < DateTime.UtcNow) throw new Exception("Your sessions has expired, please login again");
+
+            refreshtkn.IsRevoked = true;
+            await _context.SaveChangesAsync();
+
+            return await BuildAuthResponse(refreshtkn.User);
+        }
+
     }
 }
