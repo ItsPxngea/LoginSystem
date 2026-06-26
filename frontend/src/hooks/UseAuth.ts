@@ -1,22 +1,28 @@
 import { useState } from 'react'
 import { authApi } from '../API/AuthApi'
-import type { LoginRequest, RegisterRequest, ApiError, UserDTO } from '../types/Auth'
+import type { LoginRequest, RegisterRequest, ApiError, UserDTO, AuthResponse } from '../types/Auth'
 
 export function useAuth() {
   //const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const storeSession = (token: string, user: UserDTO, rememberMe: boolean) => {
+  const storeSession = (data: AuthResponse, rememberMe: boolean) => {
     const storage = rememberMe ? localStorage : sessionStorage;
     const other = rememberMe ? sessionStorage : localStorage;
 
-    storage.setItem("token", token);
-    storage.setItem("user", JSON.stringify(user));
+    storage.setItem("token", data.token);
+    storage.setItem("user", JSON.stringify(data.user));
+    storage.setItem("refreshToken", data.refreshToken);
 
     other.removeItem("token");
     other.removeItem("user");
+    other.removeItem("refreshToken")
 
+  }
+
+  const getRefreshToken = (): string | null => {
+    return localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
   }
 
   const login = async (credentials: LoginRequest, rememberMe: boolean = false): Promise<boolean> => {
@@ -25,7 +31,7 @@ export function useAuth() {
     try {
       //const { token, user } = await authApi.login(credentials)
       const data = await authApi.login(credentials)
-      storeSession(data.token, data.user, rememberMe);
+      storeSession(data, rememberMe);
       //localStorage.setItem("user", JSON.stringify(data.user))
       //localStorage.setItem('token', data.token)
 
@@ -54,8 +60,9 @@ export function useAuth() {
     try {
 
       const res = await authApi.register(data);
-      localStorage.setItem("token", res.token);
-      localStorage.setItem("user", JSON.stringify(res.user));
+      //localStorage.setItem("token", res.token);
+      //localStorage.setItem("user", JSON.stringify(res.user));
+      storeSession(res, true);
 
       return true;
 
@@ -69,15 +76,16 @@ export function useAuth() {
     }
   }
 
-  const loginWithGoogle = async (credential: string): Promise<boolean> => {
+  const loginWithGoogle = async (accessToken: string, rememberMe: boolean): Promise<boolean> => {
     setLoading(true);
     setError(null);
 
     try {
 
-      const data = await authApi.googleLogin(credential);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      const data = await authApi.googleLogin(accessToken);
+      //localStorage.setItem("token", data.token);
+      //localStorage.setItem("user", JSON.stringify(data.user));
+      storeSession(data, rememberMe)
 
       return true;
 
@@ -91,9 +99,23 @@ export function useAuth() {
   }
 
 
-  const logout = () => {
+  const logout = async (): Promise<void> => {
+
+    const refreshToken = getRefreshToken();
+
+    if(refreshToken){
+      try{
+        await authApi.logout(refreshToken)
+      }catch{
+
+      }
+    }
     localStorage.removeItem("token")
     localStorage.removeItem("user")
+    localStorage.removeItem("refreshToken")
+    sessionStorage.removeItem("token")
+    sessionStorage.removeItem("user")
+    sessionStorage.removeItem("refreshToken")
   }
 
 
