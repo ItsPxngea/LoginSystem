@@ -23,6 +23,7 @@ export interface AuthResponse {
   token: string
   expiresAt: string
   user: UserDTO
+  refreshToken: string
 }
 
 export interface LoginResponse {
@@ -44,4 +45,12 @@ export interface ApiError {
 
 export interface GooogleLoginRequest {
   credential: string
+}
+
+export interface LogoutRequest {
+  refreshToken: string
+}
+
+export interface RefreshToken {
+  refreshToken: string
 }
