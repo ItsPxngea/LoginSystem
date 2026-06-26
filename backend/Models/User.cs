@@ -40,6 +40,7 @@ namespace backend.Models
         public string token { get; set; } = string.Empty;
         public string expiresAt { get; set; } = string.Empty;
         public UserDataTransfer user { get; set; } = new();
+        public string refreshToken { get; set; } = string.Empty;
     }
 
     public class UserDataTransfer
@@ -61,6 +62,16 @@ namespace backend.Models
     public class GoogleLoginRequest
     {
         public string credential { get; set; } = string.Empty;
+    }
+
+    public class LogoutRequest
+    {
+        public string refreshToken { get; set; } = string.Empty;
+    }
+
+    public class RefreshTokenRequest
+    {
+        public string refreshToken { get; set; } = string.Empty;
     }
 
     /*public class Role
