@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/UseAuth"
 import "../Styles/SignupPageStyle.css"
 import { useGoogleLogin } from "@react-oauth/google"
+import { isValidEmailFormat } from "../Utils/Validation"
 
 export default function SignUpPage() {
 
@@ -18,7 +19,7 @@ export default function SignUpPage() {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [formError, setFormError] = useState('')
     //const [error, setError] = useState('')
-    //const [loading, setLoading] = useState(false)
+    //const [formLoading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -43,6 +44,10 @@ export default function SignUpPage() {
             return
         }
 
+        if(!isValidEmailFormat(email)){
+            setFormError("Please enter a valid email address")
+        }
+
         if (password !== confirmPassword) {
             setFormError("Passwords do not match")
             return
@@ -57,8 +62,8 @@ export default function SignUpPage() {
 
 
 
-        /*setLoading(true)
-        setTimeout(() => setLoading(false), 1500)*/
+        //setLoading(true)
+        //setTimeout(() => setLoading(false), 1500)
 
         const ok = await register({
             userFirstName: firstName,
