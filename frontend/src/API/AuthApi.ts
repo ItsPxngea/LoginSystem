@@ -5,8 +5,8 @@ export const authApi = {
   login: (credentials: LoginRequest) =>
     http.post<AuthResponse>('/authLogin/login', credentials),
 
-  logout: () =>
-    http.post<void>('/auth/logout', {}),
+  logout: (refreshToken: string) =>
+    http.post<void>('/auth/logout', {refreshToken}),
 
   /*getCurrentUser: () =>
     http.get<User>('/auth/me'),*/
