@@ -13,11 +13,13 @@ namespace backend.Services
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _config;
+        private readonly IEmailValidationService _emailValidation;
 
-        public AuthService(AppDbContext context, IConfiguration config)
+        public AuthService(AppDbContext context, IConfiguration config, IEmailValidationService emailValidation)
         {
             _context = context;
             _config = config;
+            _emailValidation = emailValidation;
         }
 
         public async Task<AuthResponse> GoogleLogin(string accessToken)
@@ -86,6 +88,9 @@ namespace backend.Services
             return BuildAuthResponse(user);
         }*/
 
+       
+
+
         public async Task<AuthResponse> Register(UserRegistrationRequest request)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -96,6 +101,14 @@ namespace backend.Services
             {
                 //normalizing email for random capital letters and spaces
                 var email = request.email.ToLowerInvariant().Trim();
+
+                var (isValid, reason) =await _emailValidation.ValidateAsync(email);
+
+                if (!isValid)
+                {
+                    throw new Exception(reason ?? "Please enter a valid email address");
+                }
+
                 var emailExists = await _context.Users.AnyAsync(u => u.email == email);
                 if (emailExists) throw new Exception("Email is already registered");
 
