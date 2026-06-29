@@ -147,6 +147,7 @@ namespace backend.Services
             return new AuthResponse
             {
                 token = token,
+                refreshToken = refreshTokenValue,
                 expiresAt = expiry.ToString("O"),
                 user = new UserDataTransfer
                 {
