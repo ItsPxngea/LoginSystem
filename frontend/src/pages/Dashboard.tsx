@@ -10,7 +10,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../hooks/UseAuth'
 import { useEffect, useState } from "react";
-import type { UserDTO } from "../types/Auth";
+import type { RefreshToken, UserDTO } from "../types/Auth";
 import { http } from '../API/Client'
 import "../Styles/Dashboard.css"
 
@@ -41,16 +41,18 @@ export default function Dashboard() {
 
 
   }*/
+ const {logout} = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token")
+  const handleLogout = async () => {
+    await logout()
     setLoading(true);
     navigate("/login")
 
 
 
   }
+
 
   useEffect(() => {
     const fetchUser = async () => {
