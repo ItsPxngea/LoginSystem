@@ -49,16 +49,37 @@ namespace backend.Controllers
 
 
         [HttpPost("google")]
-        public async Task<IActionResult>GoogleLogin([FromBody] GoogleLoginRequest request)
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
         {
             try
             {
                 var response = await _authService.GoogleLogin(request.credential);
                 return Ok(response);
-            }   
+            }
             catch (Exception e)
             {
-                return Unauthorized(new {message = e.Message});
+                return Unauthorized(new { message = e.Message });
+            }
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] LogoutRequest request)
+        {
+            await _authService.Logout(request.refreshToken);
+            return Ok(new { message = "Logged out successfully." });
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        {
+            try
+            {
+                var response = await _authService.RefreshAccessToken(request.refreshToken);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(new { message = e.Message });
             }
         }
 
