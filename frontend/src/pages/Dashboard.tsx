@@ -10,7 +10,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../hooks/UseAuth'
 import { useEffect, useState } from "react";
-import type { RefreshToken, UserDTO } from "../types/Auth";
+import type { UserDTO } from "../types/Auth";
 import { http } from '../API/Client'
 import "../Styles/Dashboard.css"
 
@@ -41,12 +41,13 @@ export default function Dashboard() {
 
 
   }*/
- const {logout} = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout()
     setLoading(true);
+    //setTimeout(() => navigate("/login"), 2500)
     navigate("/login")
 
 
@@ -69,7 +70,7 @@ export default function Dashboard() {
     fetchUser();
   }, [])
 
-  const initial = user?.userProfileName.match(/[A-Z]/)?.[0]??user?.userProfileName.trim().charAt(0).toUpperCase() ?? "";
+  const initial = user?.userProfileName.match(/[A-Z]/)?.[0] ?? user?.userProfileName.trim().charAt(0).toUpperCase() ?? "";
 
   return (
     <div className="dash-shell">
