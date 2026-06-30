@@ -93,16 +93,16 @@ namespace backend.Services
                     userFirstName = request.userFirstName,
                     userLastName = request.userLastName,
                     userProfileName = request.userProfileName,
-                    email = request.email,
+                    email = email,
                     passwordHash = passwordHash
                 };
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-                var response = BuildAuthResponse(user);
+                var response = await BuildAuthResponse(user);
                 await transaction.CommitAsync();
 
-                return await response;
+                return response;
             }
             catch
             {
