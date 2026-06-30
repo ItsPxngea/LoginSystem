@@ -29,7 +29,7 @@ namespace backend.Controllers
             {
 
                 //Console.WriteLine(e.ToString() +"\nthis is test 1");
-                return BadRequest(new { message = e.Message });
+                return Conflict(new { message = e.Message });
             }
         }
 
