@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using DnsClient;
@@ -9,7 +10,10 @@ namespace backend.Services
         //Checking if email is in correct format
         private static readonly Regex EmailFormatRegex = new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
 
-        private readonly LookupClient _dnsClient = new();
+        private readonly LookupClient _dnsClient = new(new LookupClientOptions(IPAddress.Parse("8.8.8.8"), IPAddress.Parse("1.1.1.1"))
+        {
+            Timeout = TimeSpan.FromSeconds(5)
+        });
 
         public async Task<(bool isValid, string? Reason)> ValidateAsync(string email)
         {
@@ -38,20 +42,23 @@ namespace backend.Services
             {
                 var result = await _dnsClient.QueryAsync(domain, QueryType.MX);
                 var hasRecords = result.Answers.MxRecords().Any();
-
+                Console.WriteLine($"[EmailValidation] MX query for '{domain}' -> ResponseCode: {result.Header.ResponseCode}, MX records found: {hasRecords}, Answer count: {result.Answers.Count}");
                 if (hasRecords) return (true, null);
+
+                if(result.Header.ResponseCode==DnsHeaderResponseCode.NotExistentDomain) return (false,"This email does not exist");
 
                 var aResult = await _dnsClient.QueryAsync(domain, QueryType.A);
                 var hasARecord = aResult.Answers.ARecords().Any();
 
-                if (!hasARecord) return (false, "This email does not accept mail");
-
+                if (!hasARecord || aResult.Header.ResponseCode == DnsHeaderResponseCode.NotExistentDomain){ return (false, "This email does not accept mail");}
+                Console.WriteLine("Fallback applied");
                 return (true, null);
 
             }
             catch (Exception)
             {
-                return (true, null);
+                Console.WriteLine($"DNS lookup exception");
+                return (false, null);
             }
         }
     }
