@@ -17,7 +17,6 @@ namespace backend.Controllers
             _context = context;
         }
 
-
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
@@ -51,7 +50,7 @@ namespace backend.Controllers
             if (newUsername.Length < 5 || newUsername.Length > 50) return BadRequest(new { message = "Username must be more than 5 characters" });
 
             var userID = User.FindFirst("userID")?.Value;
-            var user = await _context.Users.FindAsync(userID);
+            var user = await _context.Users.FindAsync(Guid.Parse(userID));
 
             if (user == null) return NotFound();
 
@@ -74,7 +73,7 @@ namespace backend.Controllers
             if (request.newPassword.Length < 6) return BadRequest(new { message = "Password must be at least 6 characters" });
 
             var userID = User.FindFirst("userID")?.Value;
-            var user = await _context.Users.FindAsync(userID);
+            var user = await _context.Users.FindAsync(Guid.Parse(userID));
 
             if (user == null) return NotFound();
             //Ensuring current password is matching what is in the database
