@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using backend.Data;
+using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -12,7 +14,7 @@ namespace backend.Controllers
         private readonly AppDbContext _context;
         public UserController(AppDbContext context)
         {
-            _context= context;
+            _context = context;
         }
 
 
@@ -21,22 +23,70 @@ namespace backend.Controllers
         {
             var userID = User.FindFirst("userID")?.Value;
 
-            if (userID==null) return Unauthorized();
-            
+            if (userID == null) return Unauthorized();
+
             var user = await _context.Users.FindAsync(Guid.Parse(userID));
 
-            if(User == null) return NotFound();
+            if (User == null) return NotFound();
 
             //var user = await 
-           return Ok(new
-           {
-               user.userID,
-               user.userFirstName,
-               user.userLastName,
-               user.userProfileName,
-               user.email
-               
-           });
+            return Ok(new
+            {
+                user.userID,
+                user.userFirstName,
+                user.userLastName,
+                user.userProfileName,
+                user.email
+
+            });
         }
+
+        [HttpPut("username")]
+        public async Task<IActionResult> UpdateUsername([FromBody] UpdateUsernameRequest request)
+        {
+            var newUsername = request.newUserName.Trim();
+
+            if (string.IsNullOrWhiteSpace(newUsername)) return BadRequest(new { message = "Username cannot be empty" });
+
+            if (newUsername.Length < 5 || newUsername.Length > 50) return BadRequest(new { message = "Username must be more than 5 characters" });
+
+            var userID = User.FindFirst("userID")?.Value;
+            var user = await _context.Users.FindAsync(userID);
+
+            if (user == null) return NotFound();
+
+            var taken = await _context.Users.AnyAsync(u => u.userProfileName == newUsername && u.userID.ToString() != userID);
+
+            if (taken) return Conflict(new { message = "Username already exists. Please make another selection" });
+
+            user.userProfileName = newUsername;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+
+        }
+
+        [HttpPut("password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request)
+        {
+            if (request.newPassword != request.confirmNewPassword) return BadRequest(new { message = "Passwords do not match" });
+
+            if (request.newPassword.Length < 6) return BadRequest(new { message = "Password must be at least 6 characters" });
+
+            var userID = User.FindFirst("userID")?.Value;
+            var user = await _context.Users.FindAsync(userID);
+
+            if (user == null) return NotFound();
+            //Ensuring current password is matching what is in the database
+            var isCurrentPasswordValid = BCrypt.Net.BCrypt.Verify(request.currentPassword, user.passwordHash);
+
+            if (!isCurrentPasswordValid) return StatusCode(405, new { message = "Password is not valid" });
+
+            user.passwordHash = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }
