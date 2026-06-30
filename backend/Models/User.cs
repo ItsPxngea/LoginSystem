@@ -74,6 +74,18 @@ namespace backend.Models
         public string refreshToken { get; set; } = string.Empty;
     }
 
+    public class UpdateUsernameRequest
+    {
+        public string newUserName { get; set; } = string.Empty;
+    }
+
+    public class UpdatePasswordRequest
+    {
+        public string currentPassword { get; set; } = string.Empty;
+        public string newPassword { get; set; } = string.Empty;
+        public string confirmNewPassword { get; set; } = string.Empty;
+    }
+
     /*public class Role
     {
         public int ID {get;set;}
