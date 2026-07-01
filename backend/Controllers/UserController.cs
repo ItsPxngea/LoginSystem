@@ -28,7 +28,6 @@ namespace backend.Controllers
 
             if (User == null) return NotFound();
 
-            //var user = await 
             return Ok(new
             {
                 user.userID,
