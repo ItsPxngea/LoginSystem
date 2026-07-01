@@ -87,5 +87,19 @@ namespace backend.Controllers
             return NoContent();
         }
 
+        [HttpPost("verify-password")]
+        public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordRequest request)
+        {
+            var userID = User.FindFirst("userID")?.Value;
+            var user = await _context.Users.FindAsync(Guid.Parse(userID));
+
+            if (user == null) return NotFound();
+
+            var isValid = BCrypt.Net.BCrypt.Verify(request.currentPassword, user.passwordHash);
+            if (!isValid) return StatusCode(405, new { message = "Password is not valid" });
+
+            return Ok(new { message = "Password verified" });
+        }
+
     }
 }
