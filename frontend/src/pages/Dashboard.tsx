@@ -81,8 +81,8 @@ export default function Dashboard() {
         </div>
 
         <nav className="nav-bar">
-          <a className="nav-bar-item" href="#">Dashboard</a>
-          <a className="nav-bar-item" href="#">Profile</a>
+          <a className="nav-bar-item" href="/dashboard">Dashboard</a>
+          <a className="nav-bar-item" href="/profile">Profile</a>
           <a className="nav-bar-item" href="#">Data</a>
           <a className="nav-bar-item" href="#">Settings</a>
         </nav>
