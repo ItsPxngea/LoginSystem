@@ -86,6 +86,11 @@ namespace backend.Models
         public string confirmNewPassword { get; set; } = string.Empty;
     }
 
+    public class VerifyPasswordRequest
+    {
+        public string currentPassword { get; set; } = string.Empty;
+    }
+
     /*public class Role
     {
         public int ID {get;set;}
