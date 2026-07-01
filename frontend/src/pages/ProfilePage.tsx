@@ -345,7 +345,7 @@ export default function ProfilePage() {
                                 autoFocus />
                         </div>
                         <div className='profile-actions'>
-                            <button type='submit' className='profile-btn-primary'> disabled={usernameLoading}
+                            <button type='submit' className='profile-btn-primary' disabled={usernameLoading}>
                                 {usernameLoading ? "Saving..." : "Save"}
                             </button>
                             <button type='button'
