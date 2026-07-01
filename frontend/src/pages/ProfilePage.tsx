@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { profileApi } from '../API/ProfileApi'
 import type { ProfileResponse } from '../types/Profile'
-//import '../profile.css'
+import '../Styles/ProfilePage.css'
 import { useNavigate, useLocation } from "react-router-dom"
 
 type PasswordStep = "idle" | "verifying" | "changing"
@@ -327,7 +327,7 @@ export default function ProfilePage() {
                                 setNewUserName(profile.userProfileName)
                                 setUsernameError("")
                                 setUsernameSuccess("")
-                            }}>Update Username</button>
+                            }}>Update username</button>
                     )}
                 </div>
 
