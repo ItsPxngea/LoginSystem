@@ -27,5 +27,5 @@ export function useServerStatus() {
             window.removeEventListener("focus", serverCheck);
         }
     }, [])
-    return (isOnline);
+    return {isOnline};
 }
