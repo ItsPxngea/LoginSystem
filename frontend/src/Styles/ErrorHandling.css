@@ -1,0 +1,88 @@
+.error-page {
+    min-height: 100vh;
+    background: #0d0d0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.error-card{
+    background: #16161a;
+    border: 1px solid #2a2a32;
+    border-radius: 1rem;
+    padding: 48px 40px;
+    max-width: 100%;
+    text-align: center;
+}
+.error-icon{
+    font-size: 36px;
+    margin-bottom: 1rem;
+    color: #e0a93e;
+}
+.error-title{
+    font-size: 22px;
+    font-weight: 600;
+    color: #e8e8f0;
+    margin-bottom: 10px;
+}
+.error-message{
+    font-size: 14px;
+    color: #7a7a90;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.error-details{
+    background: #1e1e26;
+    border: 1px solid #2a2a32;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px;
+    color:#f06a6a;
+    text-align: left;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin-bottom: 24px;
+}
+.error-btn{
+    background: #7c6ef7;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.error-btn:hover{
+    opacity: 0.88;
+}
+
+/*Offline banner*/
+.offline-banner{
+    position:fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e1e26;
+    border: 1px solid #e0a93e;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 13px;
+    color: #e0a93e;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    max-width: 90vw;
+    text-align: center;
+}
+
+.offline-icon{
+    font-size: 1rem;
+    flex-shrink: 0;
+}
