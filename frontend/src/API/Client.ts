@@ -1,20 +1,44 @@
 const BASE_URL = '/api'
 
-function getToken(): string | null{
-  return localStorage.getItem("token")?? sessionStorage.getItem("token")
+function getToken(): string | null {
+  return localStorage.getItem("token") ?? sessionStorage.getItem("token")
+}
+
+//create error message
+export class ApiError extends Error {
+  public statusCode: number
+  public isNetworkError: boolean
+  constructor(
+    message: string,
+    statusCode: number,
+    isNetworkError: boolean = false
+  ) {
+    super(message)
+    this.name = "ServerError";
+    this.statusCode = statusCode;
+    this.isNetworkError = isNetworkError;
+  }
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken()
+  let response: Response;
 
-  const response = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options.headers,
-    },
-  })
+  try {
+    response = await fetch(`${BASE_URL}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers,
+      },
+    })
+  } catch {
+    throw new ApiError("Could not reach server. Please check your connection and try again",
+      0,
+      true
+    )
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({
@@ -28,6 +52,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
   return response.json() as Promise<T>
 }
+
 
 export const http = {
   get: <T>(path: string) => request<T>(path),
