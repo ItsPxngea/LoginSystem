@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/UseAuth";
 import type { LayoutProps } from "../types/Layout";
-//import "../Styles/Layout.css"
+import "../Styles/LayoutStyles.css"
 
 export default function Layout({ children }: LayoutProps) {
     const { logout, getCurrentUser } = useAuth();
