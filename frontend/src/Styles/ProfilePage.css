@@ -70,6 +70,7 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin-bottom: 2px;
+    text-align: left;
 }
 
 .profile-info-value {
@@ -185,7 +186,7 @@
     color: #e8e8f0;
 }
 
-/*feeback for error and success*/
+/*feedback for error and success*/
 .profile-error {
     background: rgba(240, 106, 106, 0.1);
     border: 1.5px solid rgba(240, 106, 106, 0.3);
