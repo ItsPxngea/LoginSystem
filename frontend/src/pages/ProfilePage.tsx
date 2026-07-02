@@ -4,6 +4,7 @@ import { profileApi } from '../API/ProfileApi'
 import type { ProfileResponse } from '../types/Profile'
 import '../Styles/ProfilePage.css'
 import { useNavigate, useLocation } from "react-router-dom"
+import { ProfileSkeleton } from '../Components/SkeletonLoading'
 
 type PasswordStep = "idle" | "verifying" | "changing"
 
@@ -194,7 +195,8 @@ export default function ProfilePage() {
 
     //render
     if (loadingProfile) {
-        return <div className='profile-page'><p className='profile-loading'>Loading profile...</p></div>
+        //return <div className='profile-page'><p className='profile-loading'>Loading profile...</p></div>
+        return <ProfileSkeleton/>
     }
     if (!profile) {
         return <div className='profile-page'><p className='profile-loading'>Unable to load your profile</p></div>
