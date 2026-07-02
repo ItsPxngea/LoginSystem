@@ -9,7 +9,8 @@ namespace backend.Data
 
         public DbSet<UserRegistration> Users => Set<UserRegistration>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-        public DbSet<PasswordResetToken> PasswordResetToken =>Set<PasswordResetToken>();
+        public DbSet<PasswordResetToken> PasswordResetToken => Set<PasswordResetToken>();
+        public DbSet<ToDoItem> TodoItems => Set<ToDoItem>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,20 +35,21 @@ namespace backend.Data
                 entity.HasMany(u => u.RefreshTokens).WithOne(rt => rt.User).HasForeignKey(rt => rt.UserId).OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<RefreshToken>(entity =>{
-                 entity.HasKey(rt=>rt.Id);
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(rt => rt.Id);
 
-                 entity.Property(rt => rt.Token).IsRequired().HasMaxLength(500);
+                entity.Property(rt => rt.Token).IsRequired().HasMaxLength(500);
 
-                 entity.HasIndex(rt=>rt.Token).IsUnique();
+                entity.HasIndex(rt => rt.Token).IsUnique();
 
-                 entity.Property(rt=>rt.CreatedAt).HasDefaultValueSql("now()");
-                 });
+                entity.Property(rt => rt.CreatedAt).HasDefaultValueSql("now()");
+            });
 
 
             modelBuilder.Entity<PasswordResetToken>(entity =>
             {
-                entity.HasKey(t=>t.Id);
+                entity.HasKey(t => t.Id);
                 entity.HasIndex(t => t.Token).IsUnique();
                 entity.Property(t => t.CreatedAt).HasDefaultValueSql("now()");
                 entity.HasOne(t => t.User)
@@ -55,6 +57,29 @@ namespace backend.Data
                       .HasForeignKey(t => t.UserID)
                       .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<ToDoItem>(entity =>
+            {   
+                entity.HasKey(t => t.ID);
+
+                entity.Property(t => t.text)
+                .IsRequired()
+                .HasMaxLength(500);
+
+                entity.Property(t => t.priority)
+                .HasConversion<string>() // stores enum as readable text, not a number
+                .HasMaxLength(20);
+
+                entity.Property(t => t.createdAt)
+                .HasDefaultValueSql("now()");
+
+                // One user -> many todos, deleted automatically if the user is deleted
+                entity.HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey(t => t.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+
         }
 
         private static void SeeData(ModelBuilder modelbuilder)
@@ -62,11 +87,11 @@ namespace backend.Data
             modelbuilder.Entity<UserRegistration>().HasData(new UserRegistration
             {
                 userID = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                userFirstName ="Admin",
+                userFirstName = "Admin",
                 userLastName = "User",
-                userProfileName ="admin",
+                userProfileName = "admin",
                 email = "michaeljohnson5880@gmail.com",
-                passwordHash= "password"
+                passwordHash = "password"
 
             });
         }
