@@ -73,7 +73,7 @@ export default function Dashboard() {
   const initial = user?.userProfileName.match(/[A-Z]/)?.[0] ?? user?.userProfileName.trim().charAt(0).toUpperCase() ?? "";
 
   return (
-    <div className="dash-shell">
+    /*<div className="dash-shell">
       <aside className="sidebar">
         <div className="sidebar-logo">
           <div className="sidebar-logo-mark">▲</div>
@@ -96,7 +96,7 @@ export default function Dashboard() {
           <button className="logout-btn" onClick={handleLogout}>Log out</button>
         </div>
       </aside>
-
+*/<>
       {/*Main content*/}
       <main className="dash-content">
         <div className="page-header">
@@ -114,9 +114,10 @@ export default function Dashboard() {
         </div>
 
       </main>
+</>
 
-
-    </div>
+    //</div>
   )
+
 
 }
