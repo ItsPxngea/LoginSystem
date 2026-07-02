@@ -11,6 +11,17 @@ import ProfilePage from './pages/ProfilePage'
 import ErrorBoundary from './Components/ErrorBoundary'
 import "./Styles/ErrorHandling.css"
 import OfflineBanner from './Components/OfflineBanner'
+import Layout from './Components/Layout'
+
+function ProtectedLayout({children}:{children:React.ReactNode}){
+  return(
+    <ProtectedRoute>
+      <Layout>
+        {children}
+      </Layout>
+    </ProtectedRoute>
+  )
+}
 
 function App() {
   return (
@@ -22,8 +33,8 @@ function App() {
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><SignUpPage /></PublicRoute>} />
 
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedLayout><Dashboard /></ProtectedLayout>} />
+          <Route path="/profile" element={<ProtectedLayout><ProfilePage /></ProtectedLayout>} />
 
           <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
           <Route path="/reset-password" element={<PublicRoute><ResetPasswordPage /></PublicRoute>} />
