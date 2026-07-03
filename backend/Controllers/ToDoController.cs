@@ -46,7 +46,7 @@ namespace backend.Controllers
                 createdAt = t.createdAt
 
             }).ToListAsync();
-            if(toDoList==null || toDoList.Count==0) return NotFound(new {message="No Todo Items found. Please create a new item."});
+            if (toDoList == null || toDoList.Count == 0) return NotFound(new { message = "No Todo Items found. Please create a new item." });
 
             return Ok(toDoList);
         }
@@ -68,9 +68,18 @@ namespace backend.Controllers
             await _context.TodoItems.AddAsync(toDo);
             await _context.SaveChangesAsync();
 
+            var dto = new ToDoDTO
+            {
+                ID = toDo.ID,
+                text = toDo.text,
+                priority = toDo.priority,
+                createdAt = toDo.createdAt,
+                isDone = toDo.isDone
+            };
 
+            return CreatedAtAction(nameof(GetByID),new {id= toDo.ID }, dto);
 
-            return Ok(new ToDoDTO
+           /* return Ok(new ToDoDTO
             {
                 ID = toDo.ID,
                 text = toDo.text,
@@ -78,6 +87,7 @@ namespace backend.Controllers
                 createdAt = toDo.createdAt,
                 isDone = toDo.isDone
             });
+            */
         }
 
         //updating things inside the todo item
@@ -97,7 +107,7 @@ namespace backend.Controllers
 
             await _context.SaveChangesAsync();
 
-            return StatusCode(204, new ToDoDTO
+            return StatusCode(206,new ToDoDTO
             {
                 ID = todo.ID,
                 text = todo.text,
@@ -117,10 +127,25 @@ namespace backend.Controllers
 
             if (todo == null) return NotFound(new { message = "Todo item not found" });
 
-            await _context.TodoItems.AddAsync(todo);
+            _context.TodoItems.Remove(todo);
             await _context.SaveChangesAsync();
 
-            return StatusCode(205, "Todo item has been successfully deleted");
+            return NoContent();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByID(Guid id)
+        {
+            var toDo = await _context.TodoItems.FindAsync(id);
+            if (toDo == null) return NotFound(new { message = "Cannot find that To do item" });
+            return Ok(new ToDoDTO
+            {
+                ID = toDo.ID,
+                text = toDo.text,
+                priority = toDo.priority,
+                createdAt = toDo.createdAt,
+                isDone = toDo.isDone
+            });
         }
 
 
