@@ -27,4 +27,21 @@ namespace backend.Models
         public string text { get; set; } = string.Empty;
         public Priority priority { get; set; } = Priority.Medium;
     }
+
+    public class UpdateTodoRequest
+    {
+        public string? text { get; set; }
+        public bool? isDone { get; set; }
+        public Priority? priority { get; set; }
+
+    }
+
+    public class ToDoDTO
+    {
+        public Guid ID { get; set; }
+        public string text { get; set; } = string.Empty;
+        public bool isDone { get; set; }
+        public Priority priority { get; set; }
+        public DateTime createdAt { get; set; }
+    }
 }
