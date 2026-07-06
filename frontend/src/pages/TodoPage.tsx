@@ -3,6 +3,8 @@ import type { FormEvent } from "react";
 import { ToDoApi } from "../API/ToDoApi";
 import type { ToDoDTO, Priority } from "../types/Todo";
 //import { useFetcher } from "react-router-dom";
+import "../Styles/TodoStyle.css"
+import { Trash2 } from "lucide-react";
 
 const PRIORITY_ORDER: Record<Priority, number> = { Low: 1, Medium: 2, High: 3 };
 
@@ -26,7 +28,7 @@ export default function ToDoPage() {
         } catch {
             setFormError("Could not load todo list items. Please try again")
         } finally {
-            setLoading(true);
+            setLoading(false);
         }
     }
 
@@ -115,7 +117,7 @@ export default function ToDoPage() {
                                 />
                                 <span className="todo-text">{todo.text}</span>
                             </label>
-                            <span className={`todo-priority-badge todo-priority-${todo.priority.toLowerCase()}`}>
+                            <span className={`todo-priority-badge todo-priority-${todo.priority.toString().toLowerCase()}`}>
                                 {todo.priority}
                             </span>
                             <button
@@ -123,7 +125,7 @@ export default function ToDoPage() {
                                 onClick={() => handleDelete(todo.id)}
                                 aria-label="Delete todo"
                             >
-                                ✕
+                                <Trash2 className="delete-icon"/>
                             </button>
                         </li>
                     ))}
