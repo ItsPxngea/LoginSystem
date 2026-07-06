@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Priority } from "../types/Todo";
-//import "../Styles/TodoModalStyle.css";
+import "../Styles/TodoStyle.css";
 
 interface AddTodoModalProps {
     isOpen: boolean;
