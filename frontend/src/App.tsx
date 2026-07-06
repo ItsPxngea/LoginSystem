@@ -12,6 +12,7 @@ import ErrorBoundary from './Components/ErrorBoundary'
 import "./Styles/ErrorHandling.css"
 import OfflineBanner from './Components/OfflineBanner'
 import Layout from './Components/Layout'
+import ToDoPage from './pages/TodoPage'
 
 function ProtectedLayout({children}:{children:React.ReactNode}){
   return(
@@ -35,6 +36,7 @@ function App() {
 
           <Route path="/dashboard" element={<ProtectedLayout><Dashboard /></ProtectedLayout>} />
           <Route path="/profile" element={<ProtectedLayout><ProfilePage /></ProtectedLayout>} />
+          <Route path="/todos" element={<ProtectedLayout><ToDoPage /></ProtectedLayout>} />
 
           <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
           <Route path="/reset-password" element={<PublicRoute><ResetPasswordPage /></PublicRoute>} />
