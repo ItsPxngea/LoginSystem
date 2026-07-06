@@ -42,22 +42,23 @@ namespace backend.Services
             if (googleUser == null || string.IsNullOrEmpty(googleUser.Email))
                 throw new Exception("Could not retrieve Google account email");
 
-            var email = googleUser.Email;
+            //var email = googleUser.Email;
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == googleUser.Email);
 
             if (user == null)
             {
-                var randomPassword = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
+                //var randomPassword = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));BCrypt.Net.BCrypt.HashPassword(randomPassword),
 
                 user = new UserRegistration
                 {
                     userID = Guid.NewGuid(),
-                    userFirstName = googleUser.GivenName ?? "Google",
-                    userLastName = googleUser.FamilyName ?? "User",
-                    userProfileName = email.Split('@')[0],
-                    email = email,
-                    passwordHash = BCrypt.Net.BCrypt.HashPassword(randomPassword),
+                    userFirstName = googleUser.GivenName ?? "",
+                    userLastName = googleUser.FamilyName ?? "",
+                    userProfileName = googleUser.Email.Split('@')[0],
+                    email = googleUser.Email,
+                    passwordHash = string.Empty,
+                    provider = AuthProvider.Google
                 };
 
                 await _context.Users.AddAsync(user);
@@ -94,7 +95,8 @@ namespace backend.Services
                     userLastName = request.userLastName,
                     userProfileName = request.userProfileName,
                     email = email,
-                    passwordHash = passwordHash
+                    passwordHash = passwordHash,
+                    provider = AuthProvider.Local
                 };
 
                 _context.Users.Add(user);
