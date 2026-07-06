@@ -1,6 +1,8 @@
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using backend.Models;
+using backend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -9,9 +11,11 @@ namespace backend.Controllers
     public class AuthLoginController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthLoginController(IAuthService authService)
+        private readonly AppDbContext _context;
+        public AuthLoginController(IAuthService authService, AppDbContext context)
         {
             _authService = authService;
+            _context = context;
         }
 
         [HttpPost("register")]
@@ -19,6 +23,10 @@ namespace backend.Controllers
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
             //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(response));
+            var existing = await _context.Users.FirstOrDefaultAsync(e => e.email == request.email);
+
+            if (existing != null || existing.provider == AuthProvider.Google) return Conflict(new { message = "Unable to register, please check if you have registered in before" });
+
             try
             {   //Console.WriteLine("Test: "+ System.Text.Json.JsonSerializer.Serialize(request));
                 var response = await _authService.Register(request);
