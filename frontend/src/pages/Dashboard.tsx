@@ -14,6 +14,7 @@ import type { UserDTO } from "../types/Auth";
 import { http } from '../API/Client'
 import "../Styles/Dashboard.css"
 
+
 interface StatCard {
   label: string
   value: string
@@ -70,7 +71,7 @@ export default function Dashboard() {
     fetchUser();
   }, [])
 
-  const initial = user?.userProfileName.match(/[A-Z]/)?.[0] ?? user?.userProfileName.trim().charAt(0).toUpperCase() ?? "";
+  //const initial = user?.userProfileName.match(/[A-Z]/)?.[0] ?? user?.userProfileName.trim().charAt(0).toUpperCase() ?? "";
 
   return (
     /*<div className="dash-shell">
