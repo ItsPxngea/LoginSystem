@@ -1,32 +1,29 @@
-/*export default function Dashboard() {
-  return (
-    <div style={{ padding: '2rem', fontFamily: 'Inter, sans-serif' }}>
-      <h1>Dashboard</h1>
-      <p>You're logged in. Build your app here.</p>
-    </div>
-  )
-}*/
-
-import { useNavigate } from "react-router-dom";
-import { useAuth } from '../hooks/UseAuth'
+//import { useNavigate } from "react-router-dom";
+//import { useAuth } from '../hooks/UseAuth'
 import { useEffect, useState } from "react";
 import type { UserDTO } from "../types/Auth";
 import { http } from '../API/Client'
 import "../Styles/Dashboard.css"
+import type { ToDoDTO, Priority } from "../types/Todo";
+import { ToDoApi } from '../API/ToDoApi'
+import AddTodoModal from '../Components/ModalTodo'
 
 
-interface StatCard {
+/*interface StatCard {
   label: string
   value: string
   delta: string
   trend: "up" | "down" | "neutral"
-}
+}*/
 
 export default function Dashboard() {
 
   const [user, setUser] = useState<UserDTO | null>(null);
   const [formError, setFormError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [recentTodos, setRecentTodos] = useState<ToDoDTO[]>([])
+  const [todosLoading, setTodosLoading] = useState(true)
 
 
   /*(const getUser = async(): Promise<UserDTO> =>{
@@ -41,11 +38,11 @@ export default function Dashboard() {
     
 
 
-  }*/
+  }
   const { logout } = useAuth();
   const navigate = useNavigate();
-
-  const handleLogout = async () => {
+*/
+  /*const handleLogout = async () => {
     await logout()
     setLoading(true);
     //setTimeout(() => navigate("/login"), 2500)
@@ -53,7 +50,7 @@ export default function Dashboard() {
 
 
 
-  }
+  }*/
 
 
   useEffect(() => {
@@ -70,6 +67,32 @@ export default function Dashboard() {
     }
     fetchUser();
   }, [])
+
+  //Loading and fetching todo items to display on the dashboard
+  useEffect(() => {
+    const fetchRecentTodos = async () => {
+      setTodosLoading(true);
+
+      try {
+        const data = await ToDoApi.getAll()
+        const sorted = [...data]
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .slice(0, 5);
+        setRecentTodos(sorted);
+
+      } catch {
+        setFormError("Could not load recent todo list items.")
+      } finally {
+        setTodosLoading(loading);
+      }
+    }
+    fetchRecentTodos();
+  }, [])
+
+  const handleAddTodo = async (text: string, priority: Priority) => {
+    const newTodo = await ToDoApi.create({ text, priority });
+    setRecentTodos(prev => [newTodo, ...prev].slice(0, 5));
+  }
 
   //const initial = user?.userProfileName.match(/[A-Z]/)?.[0] ?? user?.userProfileName.trim().charAt(0).toUpperCase() ?? "";
 
@@ -105,19 +128,38 @@ export default function Dashboard() {
             <h1 className="page-title">Welcome {user?.userProfileName}</h1>
             <p className="page-sub-title">Here's the latest</p>
           </div>
-          <button className="dash-btn-primary">+ New Item</button>
+          <button className="dash-btn-primary" onClick={() => setIsModalOpen(true)}>+ New Item</button>
         </div>
 
         {/* fill in the body of the dashboard */}
 
+        {formError && <div className="todo-error">{formError}</div>}
+
         <div className="dash-card">
-          <div className="dash-card-title"><span>This week</span></div>
+          <div className="dash-card-title"><span>Recent Items</span></div>
+
+          {todosLoading ? (<p className="todo-loading">Loading...</p>) :
+            recentTodos.length === 0 ? (<p className="todo-empty">No to-dos yet — add one to get started.</p>) : (
+              <ul className="-todo-list">
+                {recentTodos.map(todo => (
+                  <li key={todo.id} className={`todo-item ${todo.isDone ? 'todo-done' : ''}`}>
+                    <span className="todo-text">{todo.text}</span>
+                    <span className={`todo-priority-badge todo-priority-${todo.priority.toString().toLowerCase()}`}>{todo.priority}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
         </div>
-
       </main>
-</>
 
-    //</div>
+      <AddTodoModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleAddTodo} />
+
+    </>
+
+    
   )
 
 
