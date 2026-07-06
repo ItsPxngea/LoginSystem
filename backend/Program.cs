@@ -61,18 +61,18 @@ builder.Services.AddRateLimiter(options =>
 
     options.AddPolicy("auth", context =>
     RateLimitPartition.GetFixedWindowLimiter(
-        partitionKey : context.Connection.RemoteIpAddress?.ToString()?? "unknown",
-        factory: _=>new FixedWindowRateLimiterOptions
+        partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        factory: _ => new FixedWindowRateLimiterOptions
         {
             PermitLimit = 5,
             Window = TimeSpan.FromMinutes(5)
         }
     ));
 
-    options.OnRejected = async(context, cancellationToken) =>
+    options.OnRejected = async (context, cancellationToken) =>
     {
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        await context.HttpContext.Response.WriteAsJsonAsync(new {message = "Too many requests. Please try again later."}, cancellationToken);
+        await context.HttpContext.Response.WriteAsJsonAsync(new { message = "Too many requests. Please try again later." }, cancellationToken);
     };
 
 });
@@ -82,6 +82,13 @@ builder.Services.AddRateLimiter(options =>
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+//Health check to ensure that there is a constant connection between the backend and the frontend
+app.MapGet("/api/health", () => Results.Ok(new
+{
+    status = "healthy",
+    timestamp = DateTime.UtcNow
+}));
 
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
