@@ -44,7 +44,7 @@ export default function SignUpPage() {
             return
         }
 
-        if(!isValidEmailFormat(email)){
+        if (!isValidEmailFormat(email)) {
             setFormError("Please enter a valid email address")
         }
 
@@ -78,11 +78,21 @@ export default function SignUpPage() {
     }
     const googleSignIn = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            const ok = await loginWithGoogle(tokenResponse.access_token)
+            const ok = await loginWithGoogle(tokenResponse.access_token, true)
             if (ok) navigate("/dashboard")
             else setFormError("Google sign-in failed. Please try again later.")
         }
     })
+    /*
+        const googleSignIn = async (response: GoogleCredentialResponse) => {
+            if (!response.credential) {
+                setFormError("Google sign-in error. Please try again");
+                return
+            }
+            const ok = await loginWithGoogle(response.credential, true)
+            if (ok) navigate("/dashboard")
+            else setFormError("Google sign-in failed. Please try again later");
+        }*/
 
     return (
         <div className="signup-page">
