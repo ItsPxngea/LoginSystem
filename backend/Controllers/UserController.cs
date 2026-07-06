@@ -46,7 +46,7 @@ namespace backend.Controllers
 
             if (string.IsNullOrWhiteSpace(newUsername)) return BadRequest(new { message = "Username cannot be empty" });
 
-            if (newUsername.Length < 5 || newUsername.Length > 50) return BadRequest(new { message = "Username must be more than 5 characters" });
+            if (newUsername.Length < 6 || newUsername.Length > 50) return BadRequest(new { message = "Username must be more than 6 characters" });
 
             var userID = User.FindFirst("userID")?.Value;
             var user = await _context.Users.FindAsync(Guid.Parse(userID));

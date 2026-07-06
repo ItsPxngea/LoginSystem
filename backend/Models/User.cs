@@ -55,8 +55,11 @@ namespace backend.Models
 
     public class GoogleUserInfo
     {
+        [JsonPropertyName("email")]
         public string? Email { get; set; }
+        [JsonPropertyName("given_name")]
         public string? GivenName { get; set; }
+        [JsonPropertyName("family_name")]
         public string? FamilyName { get; set; }
 
     }
