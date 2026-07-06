@@ -13,6 +13,7 @@ namespace backend.Models
         public string passwordHash { get; set; } = string.Empty;
         //private string userPassword { get; set; } = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
         public string email { get; set; } = string.Empty;
+        public AuthProvider provider { get; set; } = AuthProvider.Local;
 
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
@@ -57,6 +58,7 @@ namespace backend.Models
         public string? Email { get; set; }
         public string? GivenName { get; set; }
         public string? FamilyName { get; set; }
+
     }
 
     public class GoogleLoginRequest
@@ -89,6 +91,12 @@ namespace backend.Models
     public class VerifyPasswordRequest
     {
         public string currentPassword { get; set; } = string.Empty;
+    }
+
+    public enum AuthProvider
+    {
+        Local,
+        Google
     }
 
     /*public class Role
