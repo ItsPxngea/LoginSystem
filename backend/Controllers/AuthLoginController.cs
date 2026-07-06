@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Models;
 using backend.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace backend.Controllers
 {
@@ -42,6 +43,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("login")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> Login([FromBody] UserLogin request)
         {
             try
@@ -57,6 +59,7 @@ namespace backend.Controllers
 
 
         [HttpPost("google")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
         {
             //GoogleJsonWebSignature.Payload payload;
@@ -73,6 +76,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("logout")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> Logout([FromBody] LogoutRequest request)
         {
             await _authService.Logout(request.refreshToken);
@@ -80,6 +84,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("refresh")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
             try

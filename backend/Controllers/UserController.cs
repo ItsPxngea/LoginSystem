@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace backend.Controllers
 {
@@ -16,8 +17,9 @@ namespace backend.Controllers
         {
             _context = context;
         }
-
+        
         [HttpGet("profile")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> GetProfile()
         {
             var userID = User.FindFirst("userID")?.Value;
@@ -30,7 +32,7 @@ namespace backend.Controllers
 
             return Ok(new
             {
-                user.userID,
+                user!.userID,
                 user.userFirstName,
                 user.userLastName,
                 user.userProfileName,
@@ -40,6 +42,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("username")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> UpdateUsername([FromBody] UpdateUsernameRequest request)
         {
             var newUsername = request.newUserName.Trim();
@@ -49,7 +52,7 @@ namespace backend.Controllers
             if (newUsername.Length < 6 || newUsername.Length > 50) return BadRequest(new { message = "Username must be more than 6 characters" });
 
             var userID = User.FindFirst("userID")?.Value;
-            var user = await _context.Users.FindAsync(Guid.Parse(userID));
+            var user = await _context.Users.FindAsync(Guid.Parse(userID!));
 
             if (user == null) return NotFound();
 
@@ -65,6 +68,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("password")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request)
         {
             if (request.newPassword != request.confirmNewPassword) return BadRequest(new { message = "Passwords do not match" });
@@ -72,7 +76,7 @@ namespace backend.Controllers
             if (request.newPassword.Length < 6) return BadRequest(new { message = "Password must be at least 6 characters" });
 
             var userID = User.FindFirst("userID")?.Value;
-            var user = await _context.Users.FindAsync(Guid.Parse(userID));
+            var user = await _context.Users.FindAsync(Guid.Parse(userID!));
 
             if (user == null) return NotFound();
             //Ensuring current password is matching what is in the database
@@ -87,10 +91,11 @@ namespace backend.Controllers
         }
 
         [HttpPost("verify-password")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordRequest request)
         {
             var userID = User.FindFirst("userID")?.Value;
-            var user = await _context.Users.FindAsync(Guid.Parse(userID));
+            var user = await _context.Users.FindAsync(Guid.Parse(userID!));
 
             if (user == null) return NotFound();
 

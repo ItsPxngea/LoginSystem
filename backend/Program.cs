@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using backend.Services;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,12 +36,48 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod());
 });
 
+
+//Rate limiting section-----------------------------------------------------------------------------------------------------------------------
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+    RateLimitPartition.GetFixedWindowLimiter(
+     partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+     factory: _ => new FixedWindowRateLimiterOptions
+     {
+         PermitLimit = 50,
+         Window = TimeSpan.FromMinutes(1)
+     }
+    ));
+
+    options.AddPolicy("auth", context =>
+    RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey : context.Connection.RemoteIpAddress?.ToString()?? "unknown",
+        factory: _=>new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 5,
+            Window = TimeSpan.FromMinutes(5)
+        }
+    ));
+
+    options.OnRejected = async(context, cancellationToken) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.HttpContext.Response.WriteAsJsonAsync(new {message = "Too many requests. Please try again later."}, cancellationToken);
+    };
+
+});
+
+//End Rate Limiting section----------------------------------------------------------------------------------------------------------------------
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
