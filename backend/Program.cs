@@ -84,11 +84,11 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 //Health check to ensure that there is a constant connection between the backend and the frontend
-app.MapGet("/api/health", () => Results.Ok(new
+/*app.MapGet("/api/health", () => Results.Ok(new
 {
     status = "healthy",
     timestamp = DateTime.UtcNow
-}));
+}));*/
 
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function useServerStatus() {
     const [isOnline, setIsOnline] = useState(true);
@@ -27,7 +27,7 @@ export function useServerStatus() {
             window.removeEventListener("focus", serverCheck);
         }
     }, [])
-    return {isOnline};
+    return { isOnline };
 }
 /*
 export function useServerStatus() {
