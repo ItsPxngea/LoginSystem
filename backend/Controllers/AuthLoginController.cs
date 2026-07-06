@@ -25,7 +25,7 @@ namespace backend.Controllers
             //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(response));
             var existing = await _context.Users.FirstOrDefaultAsync(e => e.email == request.email);
 
-            if (existing != null || existing.provider == AuthProvider.Google) return Conflict(new { message = "Unable to register, please check if you have registered in before" });
+            if (existing != null || existing!.provider == AuthProvider.Google) return Conflict(new { message = "Unable to register, please check if you have registered in before" });
 
             try
             {   //Console.WriteLine("Test: "+ System.Text.Json.JsonSerializer.Serialize(request));
@@ -49,9 +49,9 @@ namespace backend.Controllers
                 var response = await _authService.Login(request);
                 return Ok(response);
             }
-            catch (Exception e)
+            catch
             {
-                return Unauthorized(new { message = e.Message });
+                return Unauthorized(new { message = "Please enter a valid email or password" });
             }
         }
 
@@ -59,8 +59,10 @@ namespace backend.Controllers
         [HttpPost("google")]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
         {
+            //GoogleJsonWebSignature.Payload payload;
             try
             {
+
                 var response = await _authService.GoogleLogin(request.credential);
                 return Ok(response);
             }
