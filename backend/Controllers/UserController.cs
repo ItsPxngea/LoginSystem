@@ -19,7 +19,7 @@ namespace backend.Controllers
         }
         
         [HttpGet("profile")]
-        [EnableRateLimiting("auth")]
+        
         public async Task<IActionResult> GetProfile()
         {
             var userID = User.FindFirst("userID")?.Value;
