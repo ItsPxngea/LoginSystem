@@ -7,7 +7,7 @@ export const ToDoApi = {
 
     create: (data: CreateTodoRequest) => http.post<ToDoDTO>("/todo", data),
 
-    update: (id: string, data: UpdateToDoRequest) => http.put<ToDoDTO>(`/todo/${id}`, data),
+    update: (id: string, data: UpdateToDoRequest) => http.patch<ToDoDTO>(`/todo/${id}`, data),
 
     delete: (id: string) => http.delete<{ message: string }>(`/todo/${id}`)
 }
