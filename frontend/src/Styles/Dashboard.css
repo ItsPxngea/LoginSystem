@@ -216,3 +216,61 @@
 .dash-card .todo-edit-btn {
     margin-left: auto;
 }
+
+/* ============ Responsive ============ */
+
+@media (max-width: 768px) {
+    .dash-content {
+        padding: 20px 16px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .page-title {
+        font-size: 22px;
+    }
+
+    .dash-btn-primary {
+        width: 100%;
+        padding: 11px 1rem;
+        /* slightly taller for easier tapping */
+    }
+
+    .dash-card {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dash-card .todo-item {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .dash-card .todo-text {
+        width: 100%;
+        /* forces text onto its own line, icons wrap below */
+        font-size: 13px;
+    }
+
+    .dash-card .todo-edit-btn,
+    .dash-card .todo-delete-btn {
+        padding: 6px 8px;
+        /* larger tap target on touch */
+    }
+}
+
+@media (pointer: coarse) {
+
+    .todo-edit-btn,
+    .todo-delete-btn {
+        padding: 8px 10px;
+        /* meets ~44px touch-target guidance on actual touch devices */
+    }
+}

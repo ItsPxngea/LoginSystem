@@ -14,7 +14,7 @@ export default function Dashboard() {
 
   const [user, setUser] = useState<UserDTO | null>(null);
   const [formError, setFormError] = useState("")
-  const [loading, setLoading] = useState(false)
+  //const [loading, setLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [recentTodos, setRecentTodos] = useState<ToDoDTO[]>([])
   const [todosLoading, setTodosLoading] = useState(true)
@@ -78,7 +78,7 @@ export default function Dashboard() {
       } catch {
         setFormError("Could not load recent todo list items.")
       } finally {
-        setTodosLoading(loading);
+        setTodosLoading(false);
       }
     }
     fetchRecentTodos();
@@ -107,30 +107,7 @@ export default function Dashboard() {
   //const initial = user?.userProfileName.match(/[A-Z]/)?.[0] ?? user?.userProfileName.trim().charAt(0).toUpperCase() ?? "";
 
   return (
-    /*<div className="dash-shell">
-      <aside className="sidebar">
-        <div className="sidebar-logo">
-          <div className="sidebar-logo-mark">▲</div>
-          Vertex
-        </div>
-
-        <nav className="nav-bar">
-          <a className="nav-bar-item" href="/dashboard">Dashboard</a>
-          <a className="nav-bar-item" href="/profile">Profile</a>
-          <a className="nav-bar-item" href="#">Data</a>
-          <a className="nav-bar-item" href="#">Settings</a>
-        </nav>
-
-        <div className="sidebar-bottom">
-          <div className="sidebar-avatar-row">
-            <div className="avatar">{initial}</div>
-            <span className="avatar-name">{user?.userProfileName}</span>
-          </div>
-
-          <button className="logout-btn" onClick={handleLogout}>Log out</button>
-        </div>
-      </aside>
-*/<>
+    <>
       {/*Main content*/}
       <main className="dash-content">
         <div className="page-header">
@@ -150,22 +127,22 @@ export default function Dashboard() {
 
           {todosLoading ? (<p className="todo-loading">Loading...</p>) :
             recentTodos.length === 0 ? (<p className="todo-empty">No to-dos yet — add one to get started.</p>) : (
-              <ul className="-todo-list">
+              <ul className="todo-list">
                 {recentTodos.map(todo => (
                   <li key={todo.id} className={`todo-item ${todo.isDone ? 'todo-done' : ''}`}>
                     <span className="todo-text">{todo.text}</span>
                     <span className={`todo-priority-badge todo-priority-${todo.priority.toString().toLowerCase()}`}>{todo.priority}</span>
 
                     <button className="todo-edit-btn"
-                    onClick={()=>handleEditItemDashboard(todo.id)}
-                    aria-label="Edit todo item">
-                      <Edit className="edit-btn" size={14}/>
+                      onClick={() => handleEditItemDashboard(todo.id)}
+                      aria-label="Edit todo item">
+                      <Edit className="edit-btn" size={14} />
                     </button>
 
                     <button className="todo-delete-btn"
-                    onClick={()=>handleDeleteFromDashboard(todo.id)}
-                    aria-label="Delete todo item">
-                      <Trash2 className="delete-icon" size={27}/>
+                      onClick={() => handleDeleteFromDashboard(todo.id)}
+                      aria-label="Delete todo item">
+                      <Trash2 className="delete-icon" size={27} />
                     </button>
                   </li>
                 ))}
