@@ -26,7 +26,14 @@ namespace backend.Controllers
             //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(response));
             var existing = await _context.Users.FirstOrDefaultAsync(e => e.email == request.email);
 
-            if (existing != null || existing!.provider == AuthProvider.Google) return Conflict(new { message = "Unable to register, please check if you have registered in before" });
+            if (existing != null)
+            {
+                if (existing.provider == AuthProvider.Google)
+                {
+                    return Conflict(new { message = "Please check if account is logged in via Google" });
+                }
+                return Conflict(new { message = "Unable to register, please check if you have registered in before" });
+            }
 
             try
             {   //Console.WriteLine("Test: "+ System.Text.Json.JsonSerializer.Serialize(request));
