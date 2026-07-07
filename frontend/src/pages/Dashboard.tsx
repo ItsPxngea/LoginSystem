@@ -1,4 +1,4 @@
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //import { useAuth } from '../hooks/UseAuth'
 import { useEffect, useState } from "react";
 import type { UserDTO } from "../types/Auth";
@@ -7,14 +7,8 @@ import "../Styles/Dashboard.css"
 import type { ToDoDTO, Priority } from "../types/Todo";
 import { ToDoApi } from '../API/ToDoApi'
 import AddTodoModal from '../Components/ModalTodo'
+import { Edit, Trash2 } from "lucide-react";
 
-
-/*interface StatCard {
-  label: string
-  value: string
-  delta: string
-  trend: "up" | "down" | "neutral"
-}*/
 
 export default function Dashboard() {
 
@@ -25,6 +19,7 @@ export default function Dashboard() {
   const [recentTodos, setRecentTodos] = useState<ToDoDTO[]>([])
   const [todosLoading, setTodosLoading] = useState(true)
 
+  const navigate = useNavigate();
 
   /*(const getUser = async(): Promise<UserDTO> =>{
     /*const response = await fetch(`http://localhost:5157/api/user/profile`)
@@ -89,6 +84,21 @@ export default function Dashboard() {
     fetchRecentTodos();
   }, [])
 
+  const handleDeleteFromDashboard = async (id: string) => {
+    try {
+
+      await ToDoApi.delete(id);
+      setRecentTodos(prev => prev.filter(t => t.id !== id));
+
+    } catch {
+      setFormError("Unable to delete item");
+    }
+  }
+
+  const handleEditItemDashboard = (id: string) => {
+    navigate("/todos", { state: { editID: id } })
+  }
+
   const handleAddTodo = async (text: string, priority: Priority) => {
     const newTodo = await ToDoApi.create({ text, priority });
     setRecentTodos(prev => [newTodo, ...prev].slice(0, 5));
@@ -145,6 +155,18 @@ export default function Dashboard() {
                   <li key={todo.id} className={`todo-item ${todo.isDone ? 'todo-done' : ''}`}>
                     <span className="todo-text">{todo.text}</span>
                     <span className={`todo-priority-badge todo-priority-${todo.priority.toString().toLowerCase()}`}>{todo.priority}</span>
+
+                    <button className="todo-edit-btn"
+                    onClick={()=>handleEditItemDashboard(todo.id)}
+                    aria-label="Edit todo item">
+                      <Edit className="edit-btn" size={14}/>
+                    </button>
+
+                    <button className="todo-delete-btn"
+                    onClick={()=>handleDeleteFromDashboard(todo.id)}
+                    aria-label="Delete todo item">
+                      <Trash2 className="delete-icon" size={27}/>
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -159,7 +181,7 @@ export default function Dashboard() {
 
     </>
 
-    
+
   )
 
 

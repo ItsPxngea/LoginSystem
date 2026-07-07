@@ -51,7 +51,7 @@
     font-size: 16px;
     color: #7a7a90;
     text-decoration: none;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.15, color 0.15;
 }
 
 .nav-bar-item:hover {
@@ -100,7 +100,7 @@
     color: #7a7a90;
     cursor: pointer;
     font-family: inherit;
-    transition: border-color- 0.15s, color 0.15s;
+    transition: border-color 0.15, color 0.15;
 }
 
 .logout-btn:hover {
@@ -145,10 +145,74 @@
     cursor: pointer;
     transition: opacity 0.2s;
 }
-.dash-btn-primary:hover{
+
+.dash-btn-primary:hover {
     opacity: 0.88;
 }
 
-.dash-card-title{
+.dash-card {
+    background: #16161a;
+    border: 1px solid #2a2a32;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.dash-card-title {
     font-size: 14px;
+    font-weight: 600;
+    color: #7a7a90;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 16px;
+}
+
+.dash-card .todo-list {
+    gap: 8px;
+}
+
+.dash-card .todo-item {
+    padding: 10px 12px;
+    background: #1e1e26;
+}
+
+.dash-card .todo-text {
+    font-size: 13px;
+}
+
+.dash-card .todo-priority-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+}
+
+.todo-edit-btn,
+.todo-delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+}
+
+.todo-edit-btn {
+    color: #7a7a90;
+}
+
+.todo-edit-btn:hover {
+    color: #7c6ef7;
+}
+
+.todo-delete-btn {
+    color: #7a7a90;
+}
+
+.todo-delete-btn:hover {
+    color: #f06a6a;
+}
+
+.dash-card .todo-edit-btn {
+    margin-left: auto;
 }
