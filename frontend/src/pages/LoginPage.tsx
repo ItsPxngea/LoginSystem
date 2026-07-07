@@ -1,0 +1,145 @@
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useGoogleLogin } from '@react-oauth/google'
+//import type { CredentialResponse } from '@react-oauth/google'
+import { useAuth } from '../hooks/UseAuth'
+import "../Styles/LoginPageStyle.css"
+
+export default function LoginPage() {
+  const { login, loginWithGoogle, loading, error } = useAuth()
+  const navigate = useNavigate()
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [remember, setRemember] = useState(false)
+  const [formError, setFormError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+
+  const EyeIcon = ({ visible }: { visible: boolean }) =>
+    visible ? (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-10-8-10-8a18.45 18.45 0 0 1 4.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+        <line x1="1" y1="1" x2="23" y2="23" />
+      </svg>
+    ) : (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s3-8 11-8 11 8 11 8-3 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    )
+
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+
+    if (!email || !password) {
+      setFormError('Please enter email or password')
+      return
+    }
+
+    setFormError('')
+
+    const ok = await login({ email, password }, remember)
+    if (ok) navigate('/dashboard')
+  }
+
+  const googleSignIn = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      const ok = await loginWithGoogle(tokenResponse.access_token, true)
+      if (ok) navigate("/dashboard")
+      else setFormError("Google sign-in failed. Please try again later.")
+    }
+  })
+
+  return (
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-logo">
+          <div className="login-logo-mark">▲</div>
+          <span className="login-logo-name">Vertex</span>
+        </div>
+
+        <h1 className="login-heading">Welcome back</h1>
+        <p className="login-subheading">Sign in to your account to continue.</p>
+
+        {(formError || error) && (
+          <div className="login-error">{formError || error}</div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="login-field">
+            <label htmlFor="email">Email</label>
+            <input id="email"
+              type='email'
+              placeholder='you@example.com'
+              autoComplete='email'
+              value={email}
+              onChange={e => setEmail(e.target.value)} />
+          </div>
+
+          <div className="login-field">
+            <label htmlFor="password">Password</label>
+            <div className="login-password-wrap">
+              <input id='password'
+                type={showPassword ? "text" : 'password'}
+                placeholder='********'
+                autoComplete='current-password'
+                value={password}
+                onChange={e => setPassword(e.target.value)} />
+
+              <button type="button"
+                className="login-password-toggle"
+                onClick={() => setShowPassword(v => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                tabIndex={-1}>
+                <EyeIcon visible={showPassword} />
+              </button>
+            </div>
+          </div>
+
+          <div className='login-row'>
+            <label className="login-check-label">
+              <input type="checkbox"
+                checked={remember}
+                onChange={e => setRemember(e.target.checked)} />
+              Remember me
+            </label>
+            <a href="/forgot-password" className='login-forgot'>Forgot password?</a>
+          </div>
+
+          <button type='submit' className='login-btn-primary' disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
+
+          <button className="login-btn-google" type="button" onClick={() => googleSignIn()}>
+            <svg width="18" height="18" viewBox="0 0 48 48">
+              <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.7 2.2 30.2 0 24 0 14.8 0 6.9 5.4 3 13.2l7.9 6.1C12.7 13.2 17.9 9.5 24 9.5z" />
+              <path fill="#34A853" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8C43.9 37.3 46.5 31.3 46.5 24.5z" />
+              <path fill="#FBBC05" d="M10.9 28.7A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7L2.4 13.2A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.4 10.6l8.5-5.9z" />
+              <path fill="#4285F4" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.7 2.2-7.7 2.2-6.1 0-11.3-4.1-13.1-9.6l-8.5 6.6C6.9 42.6 14.8 48 24 48z" />
+            </svg>
+            Continue with Google
+          </button>
+
+          <div className="login-divider"><span>or</span></div>
+
+          {/*<div className='login-google-wrap'>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setFormError("Google sign-in failed. Please try again later.")}
+              theme='filled_black'
+              shape='rectangular'
+              width="100%"
+            />
+          </div>
+          */}
+
+          <p className='login-signup'>
+            Don't have an account? <Link to="/register">Signup now</Link>
+          </p>
+        </form>
+      </div>
+    </div>
+  )
+}

@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#appsettings
+
+backend/bin
+/backend/obj/Debug
+/backend/bin
+backend/appsettingsDevelopment.json

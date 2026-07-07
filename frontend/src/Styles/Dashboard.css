@@ -1,0 +1,276 @@
+.dash-shell {
+    display: flex;
+    min-height: 100vh;
+    background: #0d0d0f;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #e8e8f0;
+}
+
+.sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #16161a;
+    border-right: 1px solid #2a2a32;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 4px 10px 24px;
+}
+
+.sidebar-logo-mark {
+    width: 28px;
+    height: 28px;
+    background: #7c6ef7;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #fff;
+}
+
+.nav-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-bar-item {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #7a7a90;
+    text-decoration: none;
+    transition: background 0.15, color 0.15;
+}
+
+.nav-bar-item:hover {
+    background: #1e1e26;
+    color: #e8e8f0;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    border-top: 1px solid #2a2a32;
+    padding-top: 1rem;
+}
+
+.sidebar-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #7c6ef7;
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.avatar-name {
+    font-size: 14px;
+    color: #e8e8f0;
+}
+
+.logout-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #2a2a32;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #7a7a90;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15, color 0.15;
+}
+
+.logout-btn:hover {
+    border-color: #3e3e52;
+    color: #e8e8f0;
+}
+
+.dash-content {
+    flex: 1;
+    padding: 36px 40px;
+    overflow-y: auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.page-sub-title {
+    font-size: 14px;
+    color: #7a7a90;
+    margin-top: 2px;
+}
+
+.dash-btn-primary {
+    background: #7c6ef7;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 1rem;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.dash-btn-primary:hover {
+    opacity: 0.88;
+}
+
+.dash-card {
+    background: #16161a;
+    border: 1px solid #2a2a32;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.dash-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #7a7a90;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 16px;
+}
+
+.dash-card .todo-list {
+    gap: 8px;
+}
+
+.dash-card .todo-item {
+    padding: 10px 12px;
+    background: #1e1e26;
+}
+
+.dash-card .todo-text {
+    font-size: 13px;
+}
+
+.dash-card .todo-priority-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+}
+
+.todo-edit-btn,
+.todo-delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+}
+
+.todo-edit-btn {
+    color: #7a7a90;
+}
+
+.todo-edit-btn:hover {
+    color: #7c6ef7;
+}
+
+.todo-delete-btn {
+    color: #7a7a90;
+}
+
+.todo-delete-btn:hover {
+    color: #f06a6a;
+}
+
+.dash-card .todo-edit-btn {
+    margin-left: auto;
+}
+
+/* ============ Responsive ============ */
+
+@media (max-width: 768px) {
+    .dash-content {
+        padding: 20px 16px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .page-title {
+        font-size: 22px;
+    }
+
+    .dash-btn-primary {
+        width: 100%;
+        padding: 11px 1rem;
+        /* slightly taller for easier tapping */
+    }
+
+    .dash-card {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dash-card .todo-item {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .dash-card .todo-text {
+        width: 100%;
+        /* forces text onto its own line, icons wrap below */
+        font-size: 13px;
+    }
+
+    .dash-card .todo-edit-btn,
+    .dash-card .todo-delete-btn {
+        padding: 6px 8px;
+        /* larger tap target on touch */
+    }
+}
+
+@media (pointer: coarse) {
+
+    .todo-edit-btn,
+    .todo-delete-btn {
+        padding: 8px 10px;
+        /* meets ~44px touch-target guidance on actual touch devices */
+    }
+}

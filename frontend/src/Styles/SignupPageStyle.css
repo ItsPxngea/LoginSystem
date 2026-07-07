@@ -1,0 +1,243 @@
+* {
+    box-sizing: border-box;
+}
+
+.signup-page {
+    background: #0d0d0f;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.signup-card {
+    background: #16161a;
+    border: 1px solid #2a2a32;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 420px;
+    padding: 48px 40px 40px;
+}
+
+.signup-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 36px;
+}
+
+.signup-logo-mark {
+    width: 2rem;
+    height: 2rem;
+    background: #7c6ef7;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.signup-logo-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: #e8e8f0;
+}
+
+.signup-heading {
+    font-size: 30px;
+    font-weight: 600;
+    color: #e8e8f0;
+    margin-bottom: 18px;
+}
+
+.signup-subheading {
+    font-size: 14px;
+    color: #7a7a90;
+    margin-bottom: 2rem;
+}
+
+.signup-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.signup-field {
+    margin-bottom: 18px;
+}
+
+.signup-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #7a7a90;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 7px;
+}
+
+.signup-field input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #2a2a32;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #e8e8f0;
+    font-family: inherit;
+    outline: none;
+    background: #1e1e26;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.signup-field input:focus {
+    border-color: #7c6ef7;
+    box-shadow: 0 0 0 3px rgba(124, 110, 247, 0.15);
+}
+
+.signup-field input::placeholder {
+    color: #3e3e52;
+}
+
+.signup-btn-primary {
+    width: 100%;
+    background: #7c6ef7;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-bottom: 1rem;
+    margin-top: 14px;
+}
+
+.signup-btn-primary:hover:not(:disabled) {
+    opacity: 0.88;
+}
+
+.signup-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.signup-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.signup-divider::before,
+.signup-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #2a2a32;
+}
+
+.signup-divider span {
+    font-size: 13px;
+    color: #7a7a90;
+}
+
+.signup-btn-google {
+    width: 100%;
+    background: transparent;
+    border: 1.5px solid #2a2a32;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    color: #e8e8f0;
+    transition: border-color 0.2s, background 0.2s;
+    margin-bottom: 28px;
+}
+
+.signup-btn-google:hover {
+    border-color: #3e3e52;
+    background: #1e1e26;
+}
+
+.signup-login-link {
+    text-align: center;
+    font-size: 15px;
+    color: #7a7a90;
+}
+
+.signup-login-link a {
+    text-decoration: none;
+    color: #7c6ef7;
+    font-weight: 500;
+}
+
+.signup-login-link a:hover {
+    text-decoration: underline;
+}
+
+.signup-error {
+    background: rgba(240, 106, 105, 0.1);
+    border: 1.5px solid rgba(240, 106, 106, 0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #f06a6a;
+    margin-bottom: 20px;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 480px) {
+    .signup-field-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/*Password visual toggles*/
+.signup-password-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.signup-password-wrap input {
+    width: 100%;
+    padding-right: 42px;
+}
+
+.signup-password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 4px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #7a7a90;
+    transition: color 0.15s;
+}
+
+.signup-password-toggle:hover {
+    color: #e8e8f0;
+}
