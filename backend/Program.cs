@@ -32,7 +32,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy => policy.WithOrigins("http://localhost:5173")
+    options.AddPolicy("AllowFrontend", policy => policy.WithOrigins("https://login-system-three-plum.vercel.app","http://localhost:5173")
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
