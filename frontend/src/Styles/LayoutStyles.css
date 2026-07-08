@@ -193,25 +193,7 @@
         display: flex;
         align-items: center;
     }
-}
 
-@media (min-width: 641px) {
-
-    .layout-topbar,
-    .layout-overlay {
-        display: none;
-    }
-}
-
-.layout-close-btn {
-    display: none;
-}
-
-.layout-logo--desktop {
-    display: flex;
-}
-
-@media (max-width: 640px) {
     .layout-close-btn {
         display: flex;
         align-items: center;
@@ -228,8 +210,20 @@
     .layout-close-btn:hover {
         color: #e8e8f0;
     }
+}
 
-    .layout-sidebar {
-        position: relative;
+@media (min-width: 641px) {
+
+    .layout-topbar,
+    .layout-overlay {
+        display: none;
     }
+}
+
+.layout-close-btn {
+    display: none;
+}
+
+.layout-logo--desktop {
+    display: flex;
 }
