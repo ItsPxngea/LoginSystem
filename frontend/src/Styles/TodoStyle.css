@@ -4,6 +4,7 @@
     padding: 40px 24px;
     font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: #e8e8f0;
+    overflow-x: hidden;
 }
 
 .todo-header {
@@ -75,6 +76,7 @@
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
+
 .todo-priority-select:focus {
     border-color: #7c6ef7;
     box-shadow: 0 0 0 3px rgba(124, 110, 247, 0.15);
@@ -121,6 +123,8 @@
     border-radius: 10px;
     padding: 12px 14px;
     transition: opacity 0.2;
+    max-width: 100%;
+    overflow-x: auto;
 }
 
 .todo-item.todo-done {
@@ -133,6 +137,7 @@
     gap: 10px;
     flex: 1;
     cursor: pointer;
+    min-width: 0;
 }
 
 .todo-checkbox-label input {
@@ -147,6 +152,8 @@
     font-size: 14px;
     color: #e8e8f0;
     word-break: break-word;
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 .todo-done .todo-text {
@@ -290,4 +297,18 @@
 .todo-modal-content .todo-input-row {
     display: flex;
     gap: 10px;
+}
+
+@media(max-width:640px) {
+    .todo-add-form {
+            flex-direction: column;
+        }
+    
+        .todo-priority-select {
+            width: 100%;
+        }
+    
+        .todo-add-btn {
+            width: 100%;
+        }
 }
