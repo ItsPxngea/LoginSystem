@@ -29,3 +29,5 @@ backend/bin
 /backend/obj/Debug
 /backend/bin
 backend/appsettingsDevelopment.json
+frontend/.env
+/frontend/.env

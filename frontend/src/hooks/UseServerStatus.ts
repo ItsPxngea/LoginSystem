@@ -10,7 +10,7 @@ export function useServerStatus() {
                 method: "HEAD",
                 cache: "no-store"
             })
-            setIsOnline(!res.ok || res.status === 404);
+            setIsOnline(res.ok || res.status === 200);
         } catch {
             setIsOnline(false);
         }
