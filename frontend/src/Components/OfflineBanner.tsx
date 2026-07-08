@@ -9,7 +9,7 @@ export default function OfflineBanner() {
         <div className="offline-banner">
             <span className="offline-icon">⚡</span>
             <span>
-                Cannot reach the server - Unfourtunately some features may not work.
+                Cannot reach the server - Unfortunately some features may not work.
                 We will reconnect you shortly.
             </span>
         </div>

@@ -46,7 +46,7 @@ namespace backend.Controllers
                 createdAt = t.createdAt
 
             }).ToListAsync();
-            if (toDoList == null || toDoList.Count == 0) return NotFound(new { message = "No Todo Items found. Please create a new item." });
+            //if (toDoList == null || toDoList.Count == 0) return NotFound(new { message = "No Todo Items found. Please create a new item." });
 
             return Ok(toDoList);
         }
